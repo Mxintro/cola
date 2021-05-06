@@ -1,6 +1,7 @@
 import React, { AnchorHTMLAttributes, ButtonHTMLAttributes, FC } from 'react'
 import classNames from 'classnames'
 
+
 export type ButtonSize = 'lg' | 'sm'
 export type ButtonType = 'primary' | 'default' | 'danger' | 'link'
 
@@ -17,8 +18,8 @@ interface BaseButtonProps {
 type NativeButtonProps = BaseButtonProps & ButtonHTMLAttributes<HTMLElement>
 // a标签
 type AnchorButtonProps = BaseButtonProps & AnchorHTMLAttributes<HTMLElement>
-// 设为可选Partial设置
-type ButtonProps = Partial<NativeButtonProps & AnchorButtonProps>
+// 设为可选Partial设置, 导出便于单元测试
+export type ButtonProps = Partial<NativeButtonProps & AnchorButtonProps>
 
 export const Button: FC<ButtonProps> = (props) => {
   const {
