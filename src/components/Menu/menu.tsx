@@ -5,7 +5,7 @@ import { MenuItemProps } from './menuItem'
 type MenuMode = 'horizontal' | 'vertical'
 
 export interface MenuProps {
-  defaultIndex: string;
+  defaultIndex?: string;
   mode?: MenuMode;
   className?: string;
   style?: React.CSSProperties;
@@ -27,16 +27,20 @@ export const MenuContext = createContext<IMenuContext>({index: '0'})
 export const Menu: FC<MenuProps> = (props) => {
   const { defaultIndex, mode, children, className, style, onSelect, defaultOpenSubMenus } = props
   const [ currentActive, setActive ] = useState(defaultIndex)
-  const classes = classNames('viking-menu', className, {
+
+  const classes = classNames('cola-menu', className, {
     'menu-vertical': mode === 'vertical',
     'menu-horizontal': mode !== 'vertical',
   })
+
   const handleClick = (index: string) => {
+    console.log(index)
     setActive(index)
     if(onSelect) {
       onSelect(index)
     }
   }
+  
   const passedContext: IMenuContext = {
     index: currentActive ? currentActive : '0',
     onSelect: handleClick,
@@ -59,9 +63,9 @@ export const Menu: FC<MenuProps> = (props) => {
     })
   }
   return(
-    <ul>
+    <ul className={classes} style={style}>
       <MenuContext.Provider value={passedContext}>
-        {renderChildren}
+        {renderChildren()}
       </MenuContext.Provider>
     </ul>
   )
