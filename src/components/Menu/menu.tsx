@@ -1,6 +1,7 @@
 import React, { FC, createContext, useState } from 'react'
 import classNames from 'classnames'
 import { MenuItemProps } from './menuItem'
+import { SubMenuProps } from './subMenu'
 
 type MenuMode = 'horizontal' | 'vertical'
 
@@ -40,7 +41,7 @@ export const Menu: FC<MenuProps> = (props) => {
       onSelect(index)
     }
   }
-  
+
   const passedContext: IMenuContext = {
     index: currentActive ? currentActive : '0',
     onSelect: handleClick,
@@ -53,17 +54,17 @@ export const Menu: FC<MenuProps> = (props) => {
     // 使用React.Children.map(children, function[(thisArg)])
     return React.Children.map(children, (child, index) => {
       // 断言获取diaplayName
-      const childEl = child as React.FunctionComponentElement<MenuItemProps>
+      const childEl = child as React.FunctionComponentElement<MenuItemProps | SubMenuProps>
       const { displayName } = childEl.type
       if (displayName === 'MenuItem' || displayName === 'SubMenu') {
         return React.cloneElement(childEl, { index: index.toString() })
       } else {
-        console.error('Warning: Menu has a child which is nost a MenuItem compoment.')
+        console.error('Warning: Menu has a child which is nost a MenuItem or SubMenu compoment.')
       }
     })
   }
   return(
-    <ul className={classes} style={style}>
+    <ul className={classes} style={style} data-testid="test-menu">
       <MenuContext.Provider value={passedContext}>
         {renderChildren()}
       </MenuContext.Provider>

@@ -7,6 +7,7 @@
   border-bottom: $menu-border-width solid $menu-border-color;
   box-shadow: $menu-box-shadow;
   >.menu-item {
+    position: relative;
     padding: $menu-item-padding-y $menu-item-padding-x;
     cursor: pointer;
     transition: $menu-transition;
@@ -23,6 +24,37 @@
       border-bottom: $menu-item-active-border-width solid $menu-item-active-color;
     } 
   }
+  .submenu-item {
+    position: relative;
+    .submenu-title {
+      display: flex;
+      align-items: center;
+    }
+    .arrow-icon {
+      transition: transform .25s ease-in-out;
+      margin-left: 3px;
+    }
+    &:hover {
+      .arrow-icon {
+        transform: rotate(180deg);
+      }
+    }
+  }
+  .cola-submenu {
+    list-style:none;
+    padding-left: 0;
+    white-space: nowrap;
+    width: min($numbers: 100%);
+    .menu-item {
+      padding: $menu-item-padding-y $menu-item-padding-x;
+      cursor: pointer;
+      transition: $menu-transition;
+      color: $body-color;
+      &.is-active, &:hover {
+        color: $menu-item-active-color !important;
+      }
+    }
+  }
 }
 
 .menu-vertical {
@@ -36,5 +68,22 @@
       border-bottom: 0px;
       border-left: $menu-item-active-border-width solid $menu-item-active-color;
     }
+  }
+}
+
+.menu-horizontal {
+  >.menu-item {
+    // 占位，防止抖动
+    border-bottom: $menu-item-active-border-width solid transparent;
+  }
+  .cola-submenu {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    z-index: 100;
+    background: $white;
+    text-align: center;
+    border: $menu-border-width solid $menu-border-color;
+    box-shadow: $submenu-box-shadow;
   }
 }

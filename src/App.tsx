@@ -1,46 +1,50 @@
 import React from 'react';
-import Button from './components/Button/button'
 import Menu from './components/Menu/menu'
 import MenuItem from './components/Menu/menuItem'
+import SubMenu from './components/Menu/subMenu'
 
 
 function App() {
-  const menuStyle = (): React.CSSProperties=>({
-    width: "150px"
-  })
   return (
     <div className="App">
-      {/* <Button size="lg" btnType="primary">lg</Button>
-      <Button size="sm" btnType="primary">sm</Button>
-      <Button btnType="primary" onClick={ (e) => {e.preventDefault();console.log('============')}}>primary</Button>
-      <Button btnType="default">default</Button>
-      <Button btnType="danger">danger</Button>
-      <Button disabled>hello</Button>
-      <Button btnType="link" href="http://www.baidu.com">baidu</Button> */}
-      <div>
-        <Menu >
+      <Menu >
+        <MenuItem>
+          active
+        </MenuItem>
+        <MenuItem>
+          default
+        </MenuItem>
+        <MenuItem disabled>
+          disabled
+        </MenuItem>
+        <SubMenu title='subMenu'>
           <MenuItem>
-            hello
-          </MenuItem>
-          <MenuItem>
-            web
-          </MenuItem>
-          <MenuItem>
-            world
-          </MenuItem>
-        </Menu>
-        <Menu mode='vertical' style={menuStyle()}>
-          <MenuItem>
-            hello
+            1
           </MenuItem>
           <MenuItem>
-            web
+            2
           </MenuItem>
-          <MenuItem >
-            world
+        </SubMenu>
+      </Menu>
+      <Menu mode='vertical'>
+        <MenuItem>
+          active
+        </MenuItem>
+        <MenuItem>
+          default
+        </MenuItem>
+        <MenuItem disabled>
+          disabled
+        </MenuItem>
+        <SubMenu title='subMenu'>
+          <MenuItem>
+            1
           </MenuItem>
-        </Menu>
-      </div>
+          <MenuItem>
+            2
+          </MenuItem>
+        </SubMenu>
+      </Menu>
     </div>
   );
 }
