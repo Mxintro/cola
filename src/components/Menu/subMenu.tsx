@@ -2,7 +2,7 @@ import React, { FC, useContext, useState } from 'react'
 import classNames from 'classnames'
 import { MenuContext } from './menu'
 import { MenuItemProps } from './menuItem'
-import Transition from '../Transition/transition'
+// import Transition from '../Transition/transition'
 
 export interface SubMenuProps {
   index?: string;
@@ -13,7 +13,10 @@ export interface SubMenuProps {
 const SubMenu: FC<SubMenuProps> = ({ index, title, className, children}) => {
 
   const context = useContext(MenuContext)
-  const [subOpen, setSubOpen] = useState(false)
+  // 针对纵向时，下拉菜单默认展开
+  const defaultOpenSubMenus = context.defaultOpenSubMenus as Array<string>
+  const isOPen = (index && context.mode==='vertical') ? defaultOpenSubMenus.includes(index) : false
+  const [subOpen, setSubOpen] = useState(isOPen)
   const classes = classNames('menu-item submenu-item', className, {
     'is-active': context.index === index
   })
@@ -21,11 +24,18 @@ const SubMenu: FC<SubMenuProps> = ({ index, title, className, children}) => {
   const handleClick = (e: React.MouseEvent) => {
     e.preventDefault()
     setSubOpen(!subOpen)
+    if (context.onSelect && (typeof index === 'string')) {
+      context.onSelect(index)
+    }
   }
 
+  let timer: any
   const handleMouse = (e: React.MouseEvent, toggle: boolean) => {
+    clearTimeout(timer)
     e.preventDefault()
-    setSubOpen(toggle)
+    timer = setTimeout( () => {
+      setSubOpen(toggle)
+    }, 200)  
   }
 
   const handleHover = context.mode === "horizontal" ? {
@@ -47,20 +57,16 @@ const SubMenu: FC<SubMenuProps> = ({ index, title, className, children}) => {
     })
     return (
       // 下拉动画
-      <Transition
-        in={subOpen}
-        timeout={300}
-        animation="zoom-in-top"
-      >
-        <ul className={subMenuClasses}>
-          {childrenComponent}
-        </ul>
-      </Transition>
+      <ul className={subMenuClasses}>
+        {childrenComponent}
+      </ul>
     )
   }
   return (
-    <li key={index} className={classes} { ...handleHover } onClick={handleClick}>
-      { title }
+    <li key={index} className={classes} { ...handleHover }>
+      <div onClick={handleClick}>
+        { title }
+      </div>
       { renderChildren() }
     </li>
   )

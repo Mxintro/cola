@@ -1,49 +1,50 @@
 import React from 'react';
-import Menu from './components/Menu/menu'
-import MenuItem from './components/Menu/menuItem'
-import SubMenu from './components/Menu/subMenu'
+import Menu from './components/Menu'
+import Icon from './/components/Icon'
+
 
 
 function App() {
   return (
     <div className="App">
-      <Menu >
-        <MenuItem>
+      <Icon theme='primary' icon='check-square'></Icon>
+      <Menu>
+        <Menu.Item> 
           active
-        </MenuItem>
-        <MenuItem>
+        </Menu.Item>
+        <Menu.Item>
           default
-        </MenuItem>
-        <MenuItem disabled>
+        </Menu.Item>
+        <Menu.Item disabled>
           disabled
-        </MenuItem>
-        <SubMenu title='subMenu'>
-          <MenuItem>
+        </Menu.Item>
+        <Menu.SubMenu title='subMenu'>
+          <Menu.Item>
             1
-          </MenuItem>
-          <MenuItem>
+          </Menu.Item>
+          <Menu.Item>
             2
-          </MenuItem>
-        </SubMenu>
+          </Menu.Item>
+        </Menu.SubMenu>
       </Menu>
-      <Menu mode='vertical'>
-        <MenuItem>
+      <Menu mode='vertical' defaultOpenSubMenus={['3']}>
+        <Menu.Item>
           active
-        </MenuItem>
-        <MenuItem>
+        </Menu.Item>
+        <Menu.Item>
           default
-        </MenuItem>
-        <MenuItem disabled>
+        </Menu.Item>
+        <Menu.Item disabled>
           disabled
-        </MenuItem>
-        <SubMenu title='subMenu'>
-          <MenuItem>
+        </Menu.Item>
+        <Menu.SubMenu title='subMenu'>
+          <Menu.Item>
             1
-          </MenuItem>
-          <MenuItem>
+          </Menu.Item>
+          <Menu.Item>
             2
-          </MenuItem>
-        </SubMenu>
+          </Menu.Item>
+        </Menu.SubMenu>
       </Menu>
     </div>
   );

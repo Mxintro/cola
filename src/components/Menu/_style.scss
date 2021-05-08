@@ -44,6 +44,7 @@
     list-style:none;
     padding-left: 0;
     white-space: nowrap;
+    display: none;
     width: min($numbers: 100%);
     .menu-item {
       padding: $menu-item-padding-y $menu-item-padding-x;
@@ -53,6 +54,9 @@
       &.is-active, &:hover {
         color: $menu-item-active-color !important;
       }
+    }
+    &.menu-open {
+      display: block;
     }
   }
 }
@@ -78,6 +82,7 @@
   }
   .cola-submenu {
     position: absolute;
+    $heigth: auto;
     top: calc(100% + 8px);
     left: 0;
     z-index: 100;
