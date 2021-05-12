@@ -3,7 +3,6 @@ import classNames from 'classnames'
 import { MenuContext } from './menu'
 import { MenuItemProps } from './menuItem'
 import Transition from '../Transition/transition'
-import Icon from '../Icon'
 
 export interface SubMenuProps {
   index?: string;
@@ -72,7 +71,6 @@ const SubMenu: FC<SubMenuProps> = ({ index, title, className, children}) => {
       <div onClick={handleClick}>
         { title }
         <i className="submenu-arrow"></i>
-        {/* <Icon icon="angle-down" className='arrow-icon'></Icon> */}
       </div>
       { renderChildren() }
     </li>

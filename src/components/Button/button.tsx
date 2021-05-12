@@ -12,6 +12,7 @@ interface BaseButtonProps {
   btnType?: ButtonType;
   children: React.ReactNode;
   href?: string;
+  label?: string;
 }
 
 // 添加原生属性, &合并

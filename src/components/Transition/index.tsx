@@ -1,3 +1,3 @@
-import ITransition from './transition'
+import Transition from './transition'
 
-export default ITransition
+export default Transition
