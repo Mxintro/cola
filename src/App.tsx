@@ -3,8 +3,7 @@ import Menu from './components/Menu'
 import Icon from './components/Icon'
 import Transition from './components/Transition'
 import Button from './components/Button'
-
-
+import Input from './components/Input'
 
 function App() {
   const [op, setop] = useState(false)
@@ -55,6 +54,7 @@ function App() {
         </Menu>
       </Transition>
       <Button onClick={() => setop(!op)}>toggle</Button>
+      <Input style={{width:300}}></Input>
     </div>
   );
 }
