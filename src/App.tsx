@@ -55,6 +55,14 @@ function App() {
       </Transition>
       <Button onClick={() => setop(!op)}>toggle</Button>
       <Input style={{width:300}}></Input>
+      <Input
+        defaultValue="prepend text"
+        prepend="https://"
+      />
+      <Input
+        icon="search"
+        placeholder="input with icon"
+      />
     </div>
   );
 }
