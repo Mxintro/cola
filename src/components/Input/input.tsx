@@ -5,7 +5,7 @@ import classNames from 'classnames'
 
 type InputSize = 'lg' | 'sm' 
 
-interface InputPorps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'>{
+export interface InputPorps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'>{
   disabled?: boolean,
   size?: InputSize,
   icon?: IconProp,

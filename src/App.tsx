@@ -4,11 +4,19 @@ import Icon from './components/Icon'
 import Transition from './components/Transition'
 import Button from './components/Button'
 import Input from './components/Input'
+import AutoComplete from './components/AutoComplete'
 
 function App() {
   const [op, setop] = useState(false)
+  const data = ['hello', 'react', 'java', 'javaScript', 'typeScript', 'go', 'python', 'vue', 'node', 'docker']
+  const handleFetch = (value: string): string[] => {
+    const res = data.filter(item => item.includes(value))
+    console.log(res)
+    return [...res]
+  }
   return (
     <div className="App">
+      <div>
       <Menu>
         <Menu.Item> 
           active
@@ -54,15 +62,18 @@ function App() {
         </Menu>
       </Transition>
       <Button onClick={() => setop(!op)}>toggle</Button>
+      </div>
+      
       <Input style={{width:300}}></Input>
-      <Input
+      {/* <Input
         defaultValue="prepend text"
         prepend="https://"
       />
       <Input
         icon="search"
         placeholder="input with icon"
-      />
+      /> */}
+      <AutoComplete fetchSugestions={handleFetch}></AutoComplete>
     </div>
   );
 }
