@@ -1,5 +1,7 @@
 import React, { useState } from 'react'
 import Input, { InputPorps } from '../Input/input'
+import Transition from '../Transition/transition'
+
 
 export interface Props extends InputPorps {
   fetchSugestions?: (value: string) => string[],
@@ -11,6 +13,7 @@ export const AutoComplete: React.FC<Props> = ({
   value,
   fetchSugestions,
   onChange,
+  style,
   ...res
 }) => {
 
@@ -28,8 +31,25 @@ export const AutoComplete: React.FC<Props> = ({
     }
   }
 
+  // const generateDropdown = () => {
+  //   return (
+  //     <Transition
+  //       in={}
+  //     >
+  //       <ul className="cola-suggestion-list">
+  //         {
+  //           sugestions.length>0 ? '' :
+  //           sugestions.map(item => {
+  //             <li>{item}</li>
+  //           })
+  //         }
+  //       </ul>
+  //     </Transition>
+  //   )
+  // }
+ 
   return (
-    <div>
+    <div style={style}>
       <Input
         onChange={handleChange}
       ></Input>

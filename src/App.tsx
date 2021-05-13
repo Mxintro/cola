@@ -73,7 +73,7 @@ function App() {
         icon="search"
         placeholder="input with icon"
       /> */}
-      <AutoComplete fetchSugestions={handleFetch}></AutoComplete>
+      <AutoComplete style={{width:300}} fetchSugestions={handleFetch}></AutoComplete>
     </div>
   );
 }

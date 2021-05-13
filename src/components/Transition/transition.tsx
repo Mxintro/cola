@@ -18,8 +18,10 @@ const Transition: React.FC<TransitionProps> = (props) => {
     wrapper,
     ...restProps
   } = props
+  
+  const nodeRef = React.useRef(null)
   return (
-    <CSSTransition
+    <CSSTransition nodeRef={nodeRef}
       classNames = { classNames ? classNames : animation}
       {...restProps}
     >
