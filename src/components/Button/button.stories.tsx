@@ -1,28 +1,94 @@
-import React from 'react'
-import { storiesOf } from '@storybook/react'
-import { action } from '@storybook/addon-actions'
+import React from 'react';
+// also exported from '@storybook/react' if you can deal with breaking changes in 6.1
+import { Story, Meta } from '@storybook/react/types-6-0';
 
-import Button from './button'
+import Button, { ButtonProps } from '.';
 
-const defaultButton = () => (
-  <Button onClick={action('clicked')}> default button </Button>
-)
+export default {
+  title: 'Button',
+  component: Button,
+} as Meta;
 
-const buttonWithSize = () => (
-  <>
-    <Button size="lg"> large button </Button>
-    <Button size="sm"> small button </Button>
-  </>
-)
+const Template: Story<ButtonProps> = (args) => <Button {...args} />;
 
-const buttonWithType = () => (
-  <>
-    <Button btnType="primary"> primary button </Button>
-    <Button btnType="danger"> danger button </Button>
-    <Button btnType="link" href="https://google.com"> link button </Button>
-  </>
-)
-storiesOf('Button Component', module)
-  .add('Button', defaultButton)
-  .add('不同尺寸的 Button', buttonWithSize)
-  .add('不同类型的 Button', buttonWithType)
+export const Default = Template.bind({});
+Default.args = {
+    children: 'Default Button'
+}
+
+export const DangerButton = Template.bind({});
+DangerButton.args = {
+  children: 'primary Button',
+  btnType: 'primary',
+};
+
+export const Ghost = Template.bind({});
+Ghost.args = {
+  children: 'danger Button',
+  btnType: 'danger',
+};
+
+export const Secondary = Template.bind({});
+Secondary.args = {
+  children: 'link Button',
+  btnType: 'link',
+};
+
+export const Disabled = Template.bind({});
+Disabled.args = {
+  children: 'Disabled Button',
+  disabled: true
+};
+
+// export const Loading = Template.bind({});
+// Loading.args = {
+//   children: 'Button',
+//   loading: true,
+// };
+
+// export const WithIcon = Template.bind({});
+// WithIcon.args = {
+//   icon: DownloadIcon,
+//   children: 'Download',
+// };
+
+// const ButtonRow = styled.div`
+//   display: flex;
+//   align-items: flex-start;
+//   margin-bottom: 10px;
+//   & > * {
+//     margin-right: 10px;
+//   }
+// `;
+
+// export const Sizes = () => {
+//   return (
+//     <>
+//       <ButtonRow>
+//         <Button size='large'>Large</Button>
+//         <Button size='default'>Default</Button>
+//         <Button size='small'>Small</Button>
+//       </ButtonRow>
+//       <ButtonRow>
+//         <Button btnType='danger' size='large'>Large</Button>
+//         <Button type='danger' size='default'>Default</Button>
+//         <Button type='danger' size='small'>Small</Button>
+//       </ButtonRow>
+//       <ButtonRow>
+//         <Button type='ghost' size='large'>Large</Button>
+//         <Button type='ghost' size='default'>Default</Button>
+//         <Button type='ghost' size='small'>Small</Button>
+//       </ButtonRow>
+//       <ButtonRow>
+//         <Button type='secondary' size='large'>Large</Button>
+//         <Button type='secondary' size='default'>Default</Button>
+//         <Button type='secondary' size='small'>Small</Button>
+//       </ButtonRow>
+//       <ButtonRow>
+//         <Button loading disabled size='large'>Large</Button>
+//         <Button loading disabled size='default'>Default</Button>
+//         <Button loading disabled size='small'>Small</Button>
+//       </ButtonRow>
+//     </>
+//   );
+// };
