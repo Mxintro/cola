@@ -19,6 +19,7 @@ const Transition: React.FC<TransitionProps> = (props) => {
     ...restProps
   } = props
   
+  // fix: findDOMnode warning
   const nodeRef = React.useRef(null)
   return (
     <CSSTransition nodeRef={nodeRef}

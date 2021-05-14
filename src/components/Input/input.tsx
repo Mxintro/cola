@@ -22,7 +22,7 @@ const Input: FC<InputPorps> = (props) => {
     prepend,
     append,
     style,
-    ...res
+    ...restProps
   } = props
   const cnames = classNames('cola-input-wrapper', {
     [`input-size-${size}`]: size,
@@ -31,13 +31,26 @@ const Input: FC<InputPorps> = (props) => {
     'input-group-append': !!append,
     'input-group-prepend': !!prepend
   })
+
+  // 受控组件
+  const fixControlledValue = (value: any) => {
+    if (typeof value === 'undefined' || value === null) {
+      return ''
+    }
+    return value
+  }
+
+  if ('value' in props) {
+    delete restProps.defaultValue
+    restProps.value = fixControlledValue(props.value)
+  }
   return (
     <div className={cnames} style={style}>
       {prepend && <div className="cola-input-group-prepend">{prepend}</div>}
       {icon && <div className="icon-wrapper"><Icon icon={icon} title={`title-${icon}`}/></div>}
       <input 
         className="cola-input-inner"
-        {...res}
+        {...restProps}
       />
       {append && <div className="cola-input-group-append">{append}</div>}
     </div>
