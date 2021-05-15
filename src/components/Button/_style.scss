@@ -25,10 +25,13 @@
   }
 }
 
-.btn-lg {
+.btn-size-default {
+  @include button-size($btn-padding-y, $btn-padding-x, $btn-font-size, $btn-border-radius);
+}
+.btn-size-lg {
   @include button-size($btn-padding-y-lg, $btn-padding-x-lg, $btn-font-size-lg, $btn-border-radius-lg);
 }
-.btn-sm {
+.btn-size-sm {
   @include button-size($btn-padding-y-sm, $btn-padding-x-sm, $btn-font-size-sm, $btn-border-radius-sm);
 }
 
@@ -41,6 +44,25 @@
 
 .btn-default {
   @include button-style($white, $gray-400, $body-color, $white, $primary, $primary)
+}
+
+.btn-ghost {
+  background-color:transparent;
+  color: $white;
+  &.btn-primary {
+    color: $primary;
+  }
+  &:hover {
+    color: lighten($primary, 7.5%);
+    background: transparent;
+    border-color: lighten($primary, 10%);   
+  }
+  &:focus,
+  &.focus {
+    color: lighten($primary, 7.5%);
+    background: transparent;
+    border-color: lighten($primary, 10%);    
+  }
 }
 
 .btn-link {

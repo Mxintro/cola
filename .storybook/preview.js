@@ -8,4 +8,10 @@ export const parameters = {
       date: /Date$/,
     },
   },
+  // 组件展示排序
+  options: {
+    storySort: {
+      order: ['Button','AotuComplete'],
+    },
+  }
 }

@@ -1,8 +1,9 @@
 import React, { AnchorHTMLAttributes, ButtonHTMLAttributes, FC } from 'react'
 import classNames from 'classnames'
+import Icon from '../Icon'
 
 
-export type ButtonSize = 'lg' | 'sm'
+export type ButtonSize = 'lg' | 'sm'| 'default'
 export type ButtonType = 'primary' | 'default' | 'danger' | 'link'
 
 interface BaseButtonProps {
@@ -10,9 +11,13 @@ interface BaseButtonProps {
   disabled?: boolean;
   size?: ButtonSize;
   btnType?: ButtonType;
-  children: React.ReactNode;
+  /** 插入 */
+  children?: React.ReactNode;
   href?: string;
   label?: string;
+  loading?: boolean;
+  /** 幽灵按钮，背景变为透明 */
+  ghost: boolean,
 }
 
 // 添加原生属性, &合并
@@ -24,30 +29,25 @@ export type ButtonProps = Partial<NativeButtonProps & AnchorButtonProps>
 
 export const Button: FC<ButtonProps> = (props) => {
   const {
-    btnType,
+    btnType='default',
     className,
     disabled,
-    size,
+    size='default',
     children,
     href,
+    loading=false,
+    ghost=false,
     ...restProps
   } = props
   // 效果 btn btn-lg btn-primary
   // className为用户自定义类
   const classes = classNames('btn', className, {
     [`btn-${btnType}`]: btnType,
-    [`btn-${size}`]: size,
+    [`btn-size-${size}`]: size,
     'disabled': btnType !== 'link' && disabled,
+    'btn-ghost': ghost
   })
 
-  // const handleClick = (e: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement, MouseEvent>) => {
-  //   const { onClick, disabled } = props;
-  //   if (disabled) {
-  //     e.preventDefault();
-  //     return;
-  //   }
-  //   (onClick as React.MouseEventHandler<HTMLButtonElement | HTMLAnchorElement>)?.(e);
-  // }
   if (btnType === 'link' && href) {
     return (
       <a 
@@ -62,10 +62,11 @@ export const Button: FC<ButtonProps> = (props) => {
     return (
       <button
         className={classes}
-        disabled={disabled}
+        disabled={disabled || loading}
         {...restProps}
       >
         {children}
+        { loading ? <Icon icon="spinner" spin/> : ''}
       </button>
     )
   }
