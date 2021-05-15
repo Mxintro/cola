@@ -1,13 +1,14 @@
 import React, { useState } from 'react'
-import Input, { InputPorps } from '../Input/input'
+import Input, { InputProps } from '../Input/input'
 import Transition from '../Transition/transition'
+import classNames from 'classnames'
 
 // 用户可定义数据源类型
 interface dataBase {
   value: string
 }
 export type DataSourceType<T = {}> = T & dataBase
-export interface Props extends InputPorps {
+export interface Props extends InputProps {
   fetchSugestions?: (value: string) => DataSourceType[],
   onChange?: React.ChangeEventHandler<HTMLInputElement>,
   // 自定义模板
@@ -21,7 +22,7 @@ export const AutoComplete: React.FC<Props> = ({
   onChange,
   style,
   renderOption,
-  ...res
+  ...restProps
 }) => {
 
   // 只在最顶层使用 Hook, 不要在循环，条件或嵌套函数中调用 Hook， 确保总是在你的 React 函数的最顶层调用他们。
@@ -44,6 +45,7 @@ export const AutoComplete: React.FC<Props> = ({
 
   const handleOnSelect = (sel: DataSourceType) => {
     setValue(sel.value)
+    setshowDropdown(false)
   }
 
   const renderTemplate = (item: DataSourceType) => {
@@ -61,7 +63,16 @@ export const AutoComplete: React.FC<Props> = ({
         <ul className="cola-suggestion-list">
           {
             sugestions.map((item, index) => {
-              return <li key={index} onClick={() => handleOnSelect(item)}>{renderTemplate(item)}</li>
+              const cnames = classNames('suggestion-item', {
+                // 'is-active': index === highlightIndex
+              })
+              return <li
+                key={index}
+                className={cnames}
+                onClick={() => handleOnSelect(item)}
+                >
+                {renderTemplate(item)}
+                </li>
             })
           }
         </ul>
@@ -70,8 +81,8 @@ export const AutoComplete: React.FC<Props> = ({
   }
  
   return (
-    <div style={style}>
-      <Input onChange={handleChange} value={inputValue}></Input>
+    <div style={style} className="cola-auto-complete">
+      <Input onChange={handleChange} value={inputValue} {...restProps}></Input>
       {generateDropdown()}
     </div>
   )

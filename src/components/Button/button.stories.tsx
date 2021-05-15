@@ -6,6 +6,15 @@ import Button, { ButtonProps } from '.';
 export default {
   title: 'Button',
   component: Button,
+  parameters: {
+    component: Button,
+    componentSubtitle: "按钮组件，响应用户点击行为",
+    docs: {
+      description: {
+        component: "Some description",
+      },
+    },
+  },
 } as Meta;
 
 const Template: Story<ButtonProps> = (args) => <Button {...args} />;
