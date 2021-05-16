@@ -39,6 +39,15 @@ const handleFetchGeneral = (value: string) => {
   return [...res]
 }
 
+const handleFetchAsync = async (query: string) => {
+  try {
+    const { items } = await fetch(`https://api.github.com/search/users?q=${query}`).then(res => res.json())
+    return items.slice(0, 10).map((item: any) => ({ value: item.login, ...item}))
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 const myRender = (value: DataSourceType) => {
   // 使用断言扩展数据接口
   const item = value as DataSourceType<dataType>
@@ -54,12 +63,17 @@ const Template: Story<Props> = (args) => <AutoComplete style={{width:300}} {...a
 
 export const General = Template.bind({})
 General.args = {
-  fetchSugestions: handleFetchGeneral,
+  fetchSuggestions: handleFetchGeneral,
+}
+
+export const Fetch = Template.bind({})
+Fetch.args = {
+  fetchSuggestions: handleFetchAsync,
 }
 
 export const Customize = Template.bind({})
 Customize.args = {
-  fetchSugestions: handleFetch,
+  fetchSuggestions: handleFetch,
   renderOption: myRender
 }
 
