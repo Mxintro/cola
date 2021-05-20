@@ -3,6 +3,8 @@ import Menu, { MenuProps } from './menu'
 import SubMenu, { SubMenuProps } from './subMenu'
 import MenuItem, { MenuItemProps } from './menuItem'
 
+export * from './menu'
+
  export type MenuComponent = FC<MenuProps> & {
    Item: FC<MenuItemProps>,
    SubMenu: FC<SubMenuProps>
