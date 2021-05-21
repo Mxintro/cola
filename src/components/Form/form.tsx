@@ -7,6 +7,7 @@ export interface FormProps {
   className?: string,
   children?: React.ReactNode,
   onFinish: (value: any | undefined) => void,
+  style?: React.CSSProperties
 }
 
 export const FormStoreContext = React.createContext<FormStore | undefined>(undefined)
@@ -15,7 +16,8 @@ const Form: React.FC<FormProps> = ({
   store,
   className,
   children,
-  onFinish
+  onFinish,
+  ...resProps
 }) => {
 
   const onSubmit:React.FormEventHandler<HTMLFormElement> = (e) => {
@@ -25,7 +27,7 @@ const Form: React.FC<FormProps> = ({
   
   return (
     <FormStoreContext.Provider value={store}>
-      <form onSubmit={onSubmit}>
+      <form onSubmit={onSubmit} { ...resProps }>
         {children}
       </form>
     </FormStoreContext.Provider>
