@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useRef} from 'react'
 import { FormStoreContext } from './form'
 import { RuleItem } from 'async-validator';
+import useDebounce from '../../hooks/useDebounce'
+import classNames from 'classnames'
+import Transition from '../Transition/transition'
 
 export interface FormItemProps {
   className?: string,
@@ -11,7 +14,7 @@ export interface FormItemProps {
 }
 
 const FormItem: React.FC<FormItemProps> = ({
-  name='',
+  name,
   className,
   children,
   label,
@@ -19,34 +22,42 @@ const FormItem: React.FC<FormItemProps> = ({
 }) => {
 
   const store = React.useContext(FormStoreContext)
-  const [value, setValue] = useState(name && store ? store.get(name) : undefined)
+  const [value, setValue] = useState(name && store ? store.get(name) : '')
   const [errorMsg, setErrorMsg] = useState<string>('')
   const isFirstRender = useRef(true)
+  const debounceValue = useDebounce(value, 200)
 
-  
+
   useEffect(() => {
     if (!store || !name) return
     // 第一次渲染添加rules
     if (isFirstRender.current && rules) {
       store.addRules(name, rules)
       isFirstRender.current = false
+    } else {
+      store.set(name, value, !!rules)
     }
-    const validate = !isFirstRender.current && !!rules
-    store.set(name, value, validate)
-    console.log('sssssss')
-    // issue
+    
     return store.subscribe((n:string)=>{
-      console.log('item----'+ n)
-      setErrorMsg(store.getErrors(name))
-      // if (n === name) {
-      //   // 关键 将setError回调传入store实例中
-      //   setErrorMsg(store.getErrors(name))
-      // }
+      if (n === name || n === '*') {
+        // 关键 将setError回调传入store实例中
+        setErrorMsg(store.getErrors(name))
+      }
     })
-  },[value])
+  },[debounceValue])
 
   const onChange:React.ChangeEventHandler<HTMLInputElement> = (e) => {
     setValue(e.target.value)
+  }
+
+  // 是否必填
+  const isReqiured = (a: RuleItem | RuleItem[] | undefined): boolean => {
+    if (!a) return false
+    if (a instanceof Array) {
+      return a.some(rule => rule?.required === true)
+    } else {
+      return a?.required === true
+    }
   }
 
   const renderChildren = () => {
@@ -54,11 +65,21 @@ const FormItem: React.FC<FormItemProps> = ({
     return React.isValidElement(children) && React.cloneElement(children, childProps)
   }
 
+  const classes = classNames('form-item', {
+    'is-reqiured': isReqiured(rules)
+  })
+
   return (
-    <div>
-      <label>{label}</label>
-      {renderChildren()}
-      <div>{errorMsg}</div>
+    <div className={classes}>
+      <div className="item-label">
+        <label >
+          {label}
+        </label>
+      </div>
+      <div className="item-input">
+        {renderChildren()}
+        <div className="form-item-error">{errorMsg}</div>
+      </div>
     </div>
   )
 }

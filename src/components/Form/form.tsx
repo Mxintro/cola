@@ -3,33 +3,42 @@ import FormStore from './formStore'
 import FormItem, { FormItemProps } from './formItem'
 
 export interface FormProps {
-  store: FormStore,
+  initialValues?: Object,
   className?: string,
   children?: React.ReactNode,
-  onFinish: (value: any | undefined) => void,
+  onFinish?: (value: any | undefined) => void,
+  onFinishFailed?: (value: any | undefined) => void,
   style?: React.CSSProperties
 }
 
 export const FormStoreContext = React.createContext<FormStore | undefined>(undefined)
 
 const Form: React.FC<FormProps> = ({
-  store,
+  initialValues = {},
   className,
   children,
-  onFinish,
+  onFinish = () => {},
+  onFinishFailed = () => {},
   ...resProps
 }) => {
 
+  const store = new FormStore(initialValues)
   const onSubmit:React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault()
-    onFinish(store!.get())
+    store.formOnSubmit().then( res => {
+      onFinish(res)
+    }).catch(error => {
+      onFinishFailed(error)
+    })
   }
   
   return (
     <FormStoreContext.Provider value={store}>
-      <form onSubmit={onSubmit} { ...resProps }>
-        {children}
-      </form>
+      <div className="cola-form">
+        <form onSubmit={onSubmit} { ...resProps } >
+          {children}
+        </form>
+      </div>
     </FormStoreContext.Provider>
     
   )

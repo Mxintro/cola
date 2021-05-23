@@ -1,0 +1,51 @@
+.cola-form {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 42px 24px 50px;
+}
+
+.form-item {
+  display: flex;
+  margin-bottom: 24px;
+  .item-label {
+    flex: 0 0 33.33333333%;
+    max-width: 33.33333333%;
+    text-align: right;
+    display: flex;
+    align-items: center;
+    justify-content:flex-end;
+
+    label {
+      // float: right;
+      align-items: center;
+      margin-bottom: 0;
+      
+      &::after {
+        content: ':';
+        margin: 0 8px 0 2px;
+      }
+    }
+  }
+  &.is-reqiured {
+    label {
+      &::before {
+        color: $red;
+        content: "*";
+        display: inline-block;
+        font-family: SimSun,sans-serif;
+        font-size: 14px;
+        line-height: 1;
+        margin-right: 4px;
+      }
+    }
+  }
+  .item-input{
+    flex: 0 0 66.66666667%;
+    max-width: 66.66666667%;
+    .form-item-error {
+      font-size: 14px;
+      color: $red;
+    }
+   }
+}
