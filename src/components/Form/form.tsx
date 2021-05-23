@@ -31,11 +31,13 @@ const Form: React.FC<FormProps> = ({
       onFinishFailed(error)
     })
   }
-  
+  const onReset:React.FormEventHandler<HTMLFormElement> = () => {
+    
+  }
   return (
     <FormStoreContext.Provider value={store}>
       <div className="cola-form">
-        <form onSubmit={onSubmit} { ...resProps } >
+        <form onSubmit={onSubmit} { ...resProps } onReset={onReset}>
           {children}
         </form>
       </div>

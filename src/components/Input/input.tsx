@@ -57,4 +57,5 @@ const Input: FC<InputProps> = (props) => {
   )
 }
 
+// Input.displayName = 'Input'
 export default Input

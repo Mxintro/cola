@@ -43,9 +43,12 @@
   .item-input{
     flex: 0 0 66.66666667%;
     max-width: 66.66666667%;
+    position: relative;
     .form-item-error {
       font-size: 14px;
       color: $red;
+      margin-bottom: -24px;
+      line-height: 24px;
     }
    }
 }

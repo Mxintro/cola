@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef} from 'react'
+import React, { useState, useEffect, useRef, ReactElement} from 'react'
 import { FormStoreContext } from './form'
 import { RuleItem } from 'async-validator';
 import useDebounce from '../../hooks/useDebounce'
@@ -9,7 +9,6 @@ export interface FormItemProps {
   className?: string,
   label?: string,
   name?: string,
-  children?: React.ReactNode,
   rules?: RuleItem | RuleItem[],
 }
 
@@ -60,25 +59,30 @@ const FormItem: React.FC<FormItemProps> = ({
     }
   }
 
-  const renderChildren = () => {
+  const renderChildren = () => { 
+    const child = children as ReactElement
+    if (child?.type === 'Button' || (!child?.type)) {
+      return <div >{children}</div>
+    } 
     const childProps = { value, onChange}
     return React.isValidElement(children) && React.cloneElement(children, childProps)
   }
 
   const classes = classNames('form-item', {
-    'is-reqiured': isReqiured(rules)
+    'is-reqiured': isReqiured(rules),
+    // 'form-input-failed': errorMsg !== ''
   })
 
-  return (
+  return (   
     <div className={classes}>
-      <div className="item-label">
-        <label >
+      {<div className="item-label">
+        {label? <label >
           {label}
-        </label>
-      </div>
+        </label> : ''}
+      </div>}
       <div className="item-input">
         {renderChildren()}
-        <div className="form-item-error">{errorMsg}</div>
+        {errorMsg !== '' ? <div className="form-item-error">{errorMsg}</div> : ''}
       </div>
     </div>
   )

@@ -2,6 +2,7 @@ import React from 'react';
 import Button from './components/Button'
 import Input from './components/Input'
 import Form from './components/Form'
+// import AutoComplete from './components/AutoComplete'
 
 
 function App() {
@@ -41,6 +42,7 @@ function App() {
         </Form.Item>
         <Form.Item>
           <Button type='submit'>submit</Button>
+          <Button type='reset'>reset</Button>
         </Form.Item>
       </Form>
     </div>
