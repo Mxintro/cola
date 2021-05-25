@@ -1,19 +1,23 @@
 import React, { useState, useEffect, useRef, ReactElement} from 'react'
 import { FormStoreContext } from './form'
 import { RuleItem } from 'async-validator';
+import { InputProps } from '../Input'
+import { ButtonProps } from '../Button'
+import { AutoCompleteProps } from '../AutoComplete'
 import useDebounce from '../../hooks/useDebounce'
 import classNames from 'classnames'
-import Transition from '../Transition/transition'
 
 export interface FormItemProps {
   className?: string,
   label?: string,
   name?: string,
   rules?: RuleItem | RuleItem[],
+  // children?: React.ElementType<any>
 }
+ type TtemChild = InputProps | ButtonProps | AutoCompleteProps
 
 const FormItem: React.FC<FormItemProps> = ({
-  name,
+  name, 
   className,
   children,
   label,
@@ -39,8 +43,9 @@ const FormItem: React.FC<FormItemProps> = ({
     
     return store.subscribe((n:string)=>{
       if (n === name || n === '*') {
-        // 关键 将setError回调传入store实例中
+        // 关键 将set函数回调传入store实例中
         setErrorMsg(store.getErrors(name))
+        setValue(store.get(name))
       }
     })
   },[debounceValue])
@@ -60,13 +65,26 @@ const FormItem: React.FC<FormItemProps> = ({
   }
 
   const renderChildren = () => { 
-    const child = children as ReactElement
-    if (child?.type === 'Button' || (!child?.type)) {
-      return <div >{children}</div>
-    } 
-    const childProps = { value, onChange}
-    return React.isValidElement(children) && React.cloneElement(children, childProps)
+    return React.Children.map(children, child => {
+      const childEl = child as React.FunctionComponentElement<TtemChild>
+
+      return handleChildren(childEl)
+    })
+
   }
+
+// 多层查找Input
+ function handleChildren(child: React.FunctionComponentElement<TtemChild>) {
+   if (!child) return
+   if (!child.type) {
+     return child
+   } else if (child.type.name === 'Input'){
+     const childProps = { value, onChange, hasError: errorMsg !== ''}
+     return React.cloneElement(child, childProps)
+   } else {
+    // handleChildren(child.)
+   }
+ }
 
   const classes = classNames('form-item', {
     'is-reqiured': isReqiured(rules),

@@ -10,7 +10,7 @@ interface dataBase {
   value: string
 }
 export type DataSourceType<T = {}> = T & dataBase
-export interface Props extends InputProps {
+export interface AutoCompleteProps extends InputProps {
   fetchSuggestions?: (value: string) => DataSourceType[] | Promise<DataSourceType[]>,
   onChange?: React.ChangeEventHandler<HTMLInputElement>,
   // 自定义模板
@@ -18,7 +18,7 @@ export interface Props extends InputProps {
 }
 
 
-export const AutoComplete: React.FC<Props> = ({
+export const AutoComplete: React.FC<AutoCompleteProps> = ({
   value,
   fetchSuggestions,
   onChange,

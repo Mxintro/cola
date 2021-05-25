@@ -38,7 +38,7 @@ function App() {
           label='密码'
           rules={[{message: '不能为空' }]}
           >
-          <Input></Input>
+          <Input placeholder="input placeholder"></Input>
         </Form.Item>
         <Form.Item>
           <Button type='submit'>submit</Button>

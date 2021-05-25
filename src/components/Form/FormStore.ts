@@ -38,12 +38,13 @@ export default class FormStore <T extends Object = any>{
   }
 
   getErrors(name:string) {
-    return this.errorsList[name]
+    return this.errorsList[name] || ''
   }
   
   reset() {
     this.values = deepCopy(this.initialValues)
     this.errorsList = {}
+    this.notify('*')
   }
 
   subscribe(listener: FormListener) {

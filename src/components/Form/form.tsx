@@ -32,7 +32,8 @@ const Form: React.FC<FormProps> = ({
     })
   }
   const onReset:React.FormEventHandler<HTMLFormElement> = () => {
-    
+    console.log('reset')
+    store.reset()
   }
   return (
     <FormStoreContext.Provider value={store}>

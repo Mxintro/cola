@@ -1,4 +1,4 @@
-import AutoComplete, { DataSourceType, Props } from './autoComplete'
+import AutoComplete, { DataSourceType, AutoCompleteProps } from './autoComplete'
 
 import { Story } from '@storybook/react';
 
@@ -59,7 +59,7 @@ const myRender = (value: DataSourceType) => {
   )  
 }
 
-const Template: Story<Props> = (args) => <AutoComplete style={{width:300}} {...args} />
+const Template: Story<AutoCompleteProps> = (args) => <AutoComplete style={{width:300}} {...args} />
 
 export const General = Template.bind({})
 General.args = {

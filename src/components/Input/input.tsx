@@ -11,7 +11,8 @@ export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElem
   icon?: IconProp,
   prepend?: string | ReactElement,
   append?: string  | ReactElement,
-  onChange?:  React.ChangeEventHandler<HTMLInputElement>
+  onChange?:  React.ChangeEventHandler<HTMLInputElement>,
+  hasError?: boolean
 }
 
 const Input: FC<InputProps> = (props) => {
@@ -22,6 +23,7 @@ const Input: FC<InputProps> = (props) => {
     prepend,
     append,
     style,
+    hasError=false,
     ...restProps
   } = props
   const cnames = classNames('cola-input-wrapper', {
@@ -31,6 +33,11 @@ const Input: FC<InputProps> = (props) => {
     'input-group-append': !!append,
     'input-group-prepend': !!prepend
   })
+
+  const innerCnames = classNames('cola-input-inner',{
+    'input-has-error': hasError
+    }
+  )
 
   // 受控组件
   const fixControlledValue = (value: any) => {
@@ -49,7 +56,7 @@ const Input: FC<InputProps> = (props) => {
       {prepend && <div className="cola-input-group-prepend">{prepend}</div>}
       {icon && <div className="icon-wrapper"><Icon icon={icon} title={`title-${icon}`}/></div>}
       <input 
-        className="cola-input-inner"
+        className={innerCnames}
         {...restProps}
       />
       {append && <div className="cola-input-group-append">{append}</div>}
