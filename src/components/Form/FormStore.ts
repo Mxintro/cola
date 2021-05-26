@@ -1,6 +1,5 @@
 import { deepCopy, deepGet, deepSet } from '../../utils/utils'
 import Schema, { Rules, RuleItem } from 'async-validator';
-import { threadId } from 'node:worker_threads';
 
 export type FormListener = (name: string) => void
 

@@ -14,7 +14,7 @@ export interface FormItemProps {
   rules?: RuleItem | RuleItem[],
   // children?: React.ElementType<any>
 }
- type TtemChild = InputProps | ButtonProps | AutoCompleteProps
+ type ItemChild = InputProps | ButtonProps | AutoCompleteProps
 
 const FormItem: React.FC<FormItemProps> = ({
   name, 
@@ -51,7 +51,11 @@ const FormItem: React.FC<FormItemProps> = ({
   },[debounceValue])
 
   const onChange:React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    setValue(e.target.value)
+    if (e.target.type === 'checkbox') {
+      setValue(e.target.checked)
+    } else {
+      setValue(e.target.value)
+    }
   }
 
   // 是否必填
@@ -66,7 +70,7 @@ const FormItem: React.FC<FormItemProps> = ({
 
   const renderChildren = () => { 
     return React.Children.map(children, child => {
-      const childEl = child as React.FunctionComponentElement<TtemChild>
+      const childEl = child as React.FunctionComponentElement<ItemChild>
 
       return handleChildren(childEl)
     })
@@ -74,15 +78,15 @@ const FormItem: React.FC<FormItemProps> = ({
   }
 
 // 多层查找Input
- function handleChildren(child: React.FunctionComponentElement<TtemChild>) {
+ function handleChildren(child: React.FunctionComponentElement<ItemChild>) {
+  console.log(child?.type.name)
+
    if (!child) return
-   if (!child.type) {
-     return child
-   } else if (child.type.name === 'Input'){
+   if (child?.type.name !== 'Button'){
      const childProps = { value, onChange, hasError: errorMsg !== ''}
      return React.cloneElement(child, childProps)
    } else {
-    // handleChildren(child.)
+    return child
    }
  }
 

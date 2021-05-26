@@ -2,6 +2,7 @@ import React from 'react';
 import Button from './components/Button'
 import Input from './components/Input'
 import Form from './components/Form'
+import Checkbox from './components/Checkbox'
 // import AutoComplete from './components/AutoComplete'
 
 
@@ -18,6 +19,7 @@ function App() {
   const onFinishFailed = (values: any) => {
     console.log(values)
   }
+
   console.log('appppppppppppppppppppppppppppppppp')
   return (
     <div className="App" >
@@ -40,10 +42,14 @@ function App() {
           >
           <Input placeholder="input placeholder"></Input>
         </Form.Item>
+        <Form.Item name="remember">
+          <Checkbox>hhh</Checkbox>
+        </Form.Item>  
         <Form.Item>
           <Button type='submit'>submit</Button>
           <Button type='reset'>reset</Button>
         </Form.Item>
+
       </Form>
     </div>
   );
