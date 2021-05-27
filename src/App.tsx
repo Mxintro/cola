@@ -3,6 +3,7 @@ import Button from './components/Button'
 import Input from './components/Input'
 import Form from './components/Form'
 import Checkbox from './components/Checkbox'
+import { CheckboxGroup } from './components/Checkbox/CheckboxGroup'
 // import AutoComplete from './components/AutoComplete'
 
 
@@ -20,7 +21,17 @@ function App() {
     console.log(values)
   }
 
-  console.log('appppppppppppppppppppppppppppppppp')
+  function onChange(checkedValues: any) {
+    console.log('checked = ', checkedValues);
+  }
+  
+  const plainOptions = ['Apple', 'Pear', 'Orange'];
+  const options = [
+    { label: 'Apple', value: 'Apple' },
+    { label: 'Pear', value: 'Pear' },
+    { label: 'Orange', value: 'Orange' },
+  ];
+
   return (
     <div className="App" >
       <Form 
@@ -38,19 +49,21 @@ function App() {
         <Form.Item 
           name="password"
           label='密码'
-          rules={[{message: '不能为空' }]}
+          rules={[{required: true, message: '不能为空' }]}
           >
           <Input placeholder="input placeholder"></Input>
         </Form.Item>
         <Form.Item name="remember">
-          <Checkbox>hhh</Checkbox>
+          <Checkbox  defaultChecked>hhhh</Checkbox>
         </Form.Item>  
         <Form.Item>
-          <Button type='submit'>submit</Button>
+          <Button btnType='primary' type='submit'>submit</Button>
           <Button type='reset'>reset</Button>
         </Form.Item>
-
       </Form>
+      <CheckboxGroup onChange={onChange} options={options} defaultValue={['Apple']}>
+
+      </CheckboxGroup>
     </div>
   );
 }
