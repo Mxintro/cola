@@ -69,12 +69,13 @@
     list-style:none;
     padding-left: 0;
     white-space: nowrap;
-    width: min($numbers: 100%);
+    min-width: 100%;
     .menu-item {
       padding: $menu-item-padding-y $menu-item-padding-x;
       cursor: pointer;
       transition: $menu-transition;
       color: $body-color;
+      text-align: start;
       &.is-active, &:hover {
         color: $menu-item-active-color !important;
       }

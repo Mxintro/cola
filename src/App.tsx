@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Button from './components/Button'
 import Input from './components/Input'
 import Form from './components/Form'
 import Checkbox from './components/Checkbox'
 import { CheckboxGroup } from './components/Checkbox/CheckboxGroup'
-// import AutoComplete from './components/AutoComplete'
+import AutoComplete from './components/AutoComplete'
+import Menu from './components/Menu'
 
 
 function App() {
@@ -32,9 +33,43 @@ function App() {
     { label: 'Orange', value: 'Orange' },
   ];
 
+  const dataGeneral = [ 
+    'hello', 'react', 'java', 'javaScript', 'typeScript', 'python', 'vue', 'node', 'docker', 'go', 
+  ]  
+
+  const handleFetchGeneral = (value: string) => {
+    const res = dataGeneral.filter(item => item.includes(value)).map(item => ({ value: item}))
+    return [...res]
+  }
+
+  const onSelect = (value: any) => {
+    console.log('select:' + value)
+  }
+
+  const [tran, setTran] = useState(false)
   return (
     <div className="App" >
-      <Form 
+      <button onClick={() =>setTran(!tran) }>toggle</button>
+      <Menu>
+        <Menu.Item>
+          下拉选项一
+        </Menu.Item>
+        <Menu.SubMenu title="下拉选项">
+          <Menu.Item>
+            下
+          </Menu.Item>
+          <Menu.Item>
+            下
+          </Menu.Item>
+        </Menu.SubMenu>
+      </Menu>
+      <AutoComplete 
+        style={{width:300}}
+        onSelect={onSelect}
+        fetchSuggestions={handleFetchGeneral}>
+
+      </AutoComplete>
+      {/* <Form 
         initialValues={initialValues}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
@@ -63,7 +98,7 @@ function App() {
       </Form>
       <CheckboxGroup onChange={onChange} options={options} defaultValue={['Apple']}>
 
-      </CheckboxGroup>
+      </CheckboxGroup> */}
     </div>
   );
 }

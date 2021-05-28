@@ -30,7 +30,7 @@ export const CheckboxGroup: React.FC<CheckboxGroupProps> = ({
   }
 
   const handleOnChange = (e:React.ChangeEvent<HTMLInputElement>, value: string) => {
-    let res = []
+    let res: Array<string> = []
     if(e.target.checked) {
       res = [...checkedValues, value]
     } else {

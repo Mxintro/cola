@@ -18,8 +18,15 @@ export default {
 } as Meta;
 
 const Template: Story<MenuProps> = (args) => 
-<Menu {...args}>
-  <Menu.Item></Menu.Item>
-</Menu>;
+<Menu>
+  <Menu.SubMenu title="下拉选项">
+    <Menu.Item>
+      下拉选项一
+    </Menu.Item>
+    <Menu.Item>
+      下拉选项二
+    </Menu.Item>
+  </Menu.SubMenu>
+</Menu>
 
 export const Default = Template.bind({});

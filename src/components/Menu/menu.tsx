@@ -35,7 +35,6 @@ export const Menu: FC<MenuProps> = (props) => {
   })
 
   const handleClick = (index: string) => {
-    console.log(index)
     setActive(index)
     if(onSelect) {
       onSelect(index)

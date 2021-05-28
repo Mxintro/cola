@@ -10,9 +10,10 @@ interface dataBase {
   value: string
 }
 export type DataSourceType<T = {}> = T & dataBase
-export interface AutoCompleteProps extends InputProps {
+
+export interface AutoCompleteProps extends Omit<InputProps, 'onSelect'> {
   fetchSuggestions?: (value: string) => DataSourceType[] | Promise<DataSourceType[]>,
-  onChange?: React.ChangeEventHandler<HTMLInputElement>,
+  onSelect?: (value: string) => void,
   // 自定义模板
   renderOption?: (data: DataSourceType) => React.ReactElement
 }
@@ -21,7 +22,7 @@ export interface AutoCompleteProps extends InputProps {
 export const AutoComplete: React.FC<AutoCompleteProps> = ({
   value,
   fetchSuggestions,
-  onChange,
+  onSelect,
   style,
   renderOption,
   ...restProps
@@ -65,7 +66,7 @@ export const AutoComplete: React.FC<AutoCompleteProps> = ({
     isSelected.current = false
   }, [debounceValue]) // 跳过effect，如果debounceValue没变
 
-  // 处理输入
+  // 处理输入d
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
     const value = e.target.value.trim()
     setValue(value)
@@ -75,11 +76,11 @@ export const AutoComplete: React.FC<AutoCompleteProps> = ({
     isSelected.current = true
     setshowDropdown(false)
     setValue(sel.value)
+    onSelect  && onSelect (sel.value)
   }
 
   // 处理键盘事件
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement> ) => {
-    console.log(e.code)
     switch(e.code) {
       case 'ArrowDown':
         sethighlightIndex(highlightIndex+1)
@@ -107,7 +108,6 @@ export const AutoComplete: React.FC<AutoCompleteProps> = ({
   }
 
   const generateDropdown = () => {
-    console.log(suggestions, showDropdown)
     return (
       <Transition
         in={showDropdown}
