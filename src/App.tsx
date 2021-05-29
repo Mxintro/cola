@@ -6,6 +6,8 @@ import Checkbox from './components/Checkbox'
 import { CheckboxGroup } from './components/Checkbox/CheckboxGroup'
 import AutoComplete from './components/AutoComplete'
 import Menu from './components/Menu'
+import Select from './components/Select/select'
+import Option from './components/Option/option'
 
 
 function App() {
@@ -49,26 +51,16 @@ function App() {
   const [tran, setTran] = useState(false)
   return (
     <div className="App" >
-      <button onClick={() =>setTran(!tran) }>toggle</button>
-      <Menu>
-        <Menu.Item>
-          下拉选项一
-        </Menu.Item>
-        <Menu.SubMenu title="下拉选项">
-          <Menu.Item>
-            下
-          </Menu.Item>
-          <Menu.Item>
-            下
-          </Menu.Item>
-        </Menu.SubMenu>
-      </Menu>
-      <AutoComplete 
+
+      {/* <AutoComplete 
         style={{width:300}}
         onSelect={onSelect}
-        fetchSuggestions={handleFetchGeneral}>
-
-      </AutoComplete>
+        onSearch={handleFetchGeneral}>
+      </AutoComplete> */}
+      <Select defaultValue='hhhh' style={{width: 400}}>
+        <Option value='fd'>fdf</Option>
+        <Option value='hg'>gdg</Option>
+      </Select>
       {/* <Form 
         initialValues={initialValues}
         onFinish={onFinish}

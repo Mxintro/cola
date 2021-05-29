@@ -7,6 +7,7 @@ type InputSize = 'lg' | 'sm'
 
 export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'>{
   disabled?: boolean,
+  readOnly?: boolean,
   size?: InputSize,
   icon?: IconProp,
   prepend?: string | ReactElement,
@@ -57,6 +58,7 @@ const Input: FC<InputProps> = (props) => {
       {icon && <div className="icon-wrapper"><Icon icon={icon} title={`title-${icon}`}/></div>}
       <input 
         className={innerCnames}
+        disabled={disabled}
         {...restProps}
       />
       {append && <div className="cola-input-group-append">{append}</div>}

@@ -4,6 +4,7 @@ import Transition from '../Transition/transition'
 import Icon from '../Icon'
 import classNames from 'classnames'
 import useDebounce from '../../hooks/useDebounce'
+import useClickOutside from '../../hooks/useClickOutside'
 
 // 用户可定义数据源类型
 interface dataBase {
@@ -12,7 +13,7 @@ interface dataBase {
 export type DataSourceType<T = {}> = T & dataBase
 
 export interface AutoCompleteProps extends Omit<InputProps, 'onSelect'> {
-  fetchSuggestions?: (value: string) => DataSourceType[] | Promise<DataSourceType[]>,
+  onSearch?: (value: string) => DataSourceType[] | Promise<DataSourceType[]>,
   onSelect?: (value: string) => void,
   // 自定义模板
   renderOption?: (data: DataSourceType) => React.ReactElement
@@ -21,7 +22,7 @@ export interface AutoCompleteProps extends Omit<InputProps, 'onSelect'> {
 
 export const AutoComplete: React.FC<AutoCompleteProps> = ({
   value,
-  fetchSuggestions,
+  onSearch,
   onSelect,
   style,
   renderOption,
@@ -34,16 +35,22 @@ export const AutoComplete: React.FC<AutoCompleteProps> = ({
   const [suggestions, setSuggestions] = useState<DataSourceType[]>([])
   const [showDropdown, setshowDropdown] = useState<boolean>(false)
   const [Loading, setLoading] = useState<boolean>(false)
-  const [highlightIndex, sethighlightIndex] = useState<number>(-1)
+  const [highlightIndex, setHighlightIndex] = useState<number>(-1)
   // 解决选中后，持续加载问题
   const isSelected = useRef(false)
   // 输入防抖
   const debounceValue = useDebounce(inputValue, 200)
+  // 组件本身
+  const thisComp = useRef<HTMLDivElement>(null)
+  useClickOutside(thisComp, ()=> {
+    setSuggestions([])
+    setshowDropdown(false)
+  })
 
   useEffect(() => {
     setSuggestions([])
-    if (debounceValue && fetchSuggestions && !isSelected.current) {
-      const result = fetchSuggestions(debounceValue)
+    if (debounceValue && onSearch && !isSelected.current) {
+      const result = onSearch(debounceValue)
 
       if (result instanceof Promise) {
         setLoading(true)
@@ -80,13 +87,20 @@ export const AutoComplete: React.FC<AutoCompleteProps> = ({
   }
 
   // 处理键盘事件
+  const highLight = (index: number) => {
+    if (index < 0) index = 0
+    if (index >= suggestions.length) {
+      index = suggestions.length - 1
+    }
+    setHighlightIndex(index)
+  }
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement> ) => {
     switch(e.code) {
       case 'ArrowDown':
-        sethighlightIndex(highlightIndex+1)
+        highLight(highlightIndex+1)
         break
       case 'ArrowUp':
-        sethighlightIndex(highlightIndex-1)
+        highLight(highlightIndex-1)
         break
       case 'Enter':
         if (suggestions[highlightIndex]) {
@@ -140,7 +154,7 @@ export const AutoComplete: React.FC<AutoCompleteProps> = ({
   }
  
   return (
-    <div style={style} className="cola-auto-complete">
+    <div style={style} className="cola-auto-complete" ref={thisComp}> 
       <Input 
         onChange={handleChange}
         value={inputValue}

@@ -63,17 +63,17 @@ const Template: Story<AutoCompleteProps> = (args) => <AutoComplete style={{width
 
 export const General = Template.bind({})
 General.args = {
-  fetchSuggestions: handleFetchGeneral,
+  onSearch: handleFetchGeneral,
 }
 
 export const Fetch = Template.bind({})
 Fetch.args = {
-  fetchSuggestions: handleFetchAsync,
+  onSearch: handleFetchAsync,
 }
 
 export const Customize = Template.bind({})
 Customize.args = {
-  fetchSuggestions: handleFetch,
+  onSearch: handleFetch,
   renderOption: myRender
 }
 
