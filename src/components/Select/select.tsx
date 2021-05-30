@@ -23,8 +23,6 @@ export const Select: React.FC<SelectProps> = ({
   ...restProps
 }) => {
 
-  // 只在最顶层使用 Hook, 不要在循环，条件或嵌套函数中调用 Hook， 确保总是在你的 React 函数的最顶层调用他们。
-  // 遵守这条规则，你就能确保 Hook 在每一次渲染中都按照同样的顺序被调用。
   const [value, setValue] = useState<string | number>(defaultValue)
   const [showDropdown, setshowDropdown] = useState<boolean>(false)
   const [highlightIndex, setHighlightIndex] = useState<number>(-1)

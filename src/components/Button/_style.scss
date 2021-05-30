@@ -53,6 +53,12 @@
   &.btn-primary {
     color: $primary;
   }
+  &.btn-danger {
+    color: $danger;
+  }
+  &.btn-default {
+    color: $gray-400;
+  }
   &:hover {
     color: lighten($primary, 7.5%);
     background: transparent;

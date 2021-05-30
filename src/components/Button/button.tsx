@@ -9,7 +9,7 @@ export type ButtonType = 'primary' | 'default' | 'danger' | 'link'
 interface BaseButtonProps {
   className?: string;
   disabled?: boolean;
-  size?: ButtonSize;
+  size: ButtonSize;
   btnType?: ButtonType;
   /** 插入 */
   children?: React.ReactNode;
