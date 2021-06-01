@@ -1,0 +1,67 @@
+import { Meta, Story, Canvas, Props, ArgsTable } from '@storybook/addon-docs/blocks';
+import Input, {InputProps} from './input'
+import Icon from '../Icon'
+
+<Meta title="Input" 
+  component={Input}
+  />
+
+# Input组件
+
+<br/>
+
+
+<Input style={{width: 300}} placeholder='input'/>
+
+#####
+##### 安装：
+
+```sh
+  npm install cola-comp --save
+```
+##### 基本用法：
+```js
+import Button from './button'
+```
+
+##### 各种类型Input
+
+<Canvas>
+  <Story name="default" args={{
+    placeholder: 'default'
+  }}>
+    {args => <Input {...args} style={{width: 300}}/>}
+  </Story>
+  <Story name="Icon" args={{
+    icon: 'search',
+    placeholder: 'Input后部添加图标'
+  }}>
+    {args => <Input {...args} style={{width: 300}}/>}
+  </Story>
+  <Story name="disabled" args={{
+    disabled: true,
+    placeholder: 'Input禁用'
+  }}>
+    {args => <Input {...args} style={{width: 300}}/>}
+  </Story>
+  <Story name="prepend" args={{
+    defaultValue: 'www.google',
+    prepend: 'https://'
+  }}>
+    {args => <Input {...args} style={{width: 300}}/>}
+  </Story>
+  <Story name="append" args={{
+    append: '.com',
+    defaultValue: 'google'
+  }}>
+    {args => <Input {...args} style={{width: 300}}/>}
+  </Story>
+  <Story name="password" args={{
+  }}>
+    {args => <Input.Password {...args} style={{width: 300}}/>}
+  </Story>
+</Canvas>
+
+<Props of={Input} />
+
+

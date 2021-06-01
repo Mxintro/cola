@@ -1,11 +1,11 @@
 import React, { useEffect} from 'react'
 
 export interface OptionProps {
-  key?: string | number;
+  key?: string;
   // disabled?: boolean;
-  value: string | number;
-  onClick?: (value: string | number) => void;
-  addOption?: (value: string | number) => void;
+  value: string;
+  onClick?: (value: string) => void;
+  addOption?: (value: string) => void;
   className?: string;
   style?: React.CSSProperties;
   label?: React.ReactNode;

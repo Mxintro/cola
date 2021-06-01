@@ -7,16 +7,28 @@ export type ButtonSize = 'lg' | 'sm'| 'default'
 export type ButtonType = 'primary' | 'default' | 'danger' | 'link'
 
 interface BaseButtonProps {
+  /** 
+   * 添加css class 
+  */
   className?: string;
+  /** 是否可用 */
   disabled?: boolean;
+  /** 
+   * 按钮尺寸 
+  */
   size: ButtonSize;
+  /** 
+   * 按钮类型 
+   */
   btnType?: ButtonType;
-  /** 插入 */
-  children?: React.ReactNode;
+  /** 
+   * link类型链接 */
   href?: string;
-  label?: string;
+  /**
+   * 设置按钮载入状态
+   */
   loading?: boolean;
-  /** 幽灵按钮，背景变为透明 */
+  /** 幽灵属性，使按钮背景透明 */
   ghost: boolean,
 }
 
@@ -29,14 +41,14 @@ export type ButtonProps = Partial<NativeButtonProps & AnchorButtonProps>
 
 export const Button: FC<ButtonProps> = (props) => {
   const {
-    btnType='default',
+    btnType,
     className,
     disabled,
-    size='default',
+    size,
     children,
     href,
-    loading=false,
-    ghost=false,
+    loading,
+    ghost,
     ...restProps
   } = props
   // 效果 btn btn-lg btn-primary
@@ -64,6 +76,7 @@ export const Button: FC<ButtonProps> = (props) => {
         className={classes}
         disabled={disabled || loading}
         {...restProps}
+        
       >
         {children}
         { loading ? <Icon icon="spinner" spin/> : ''}
@@ -74,8 +87,10 @@ export const Button: FC<ButtonProps> = (props) => {
 
 Button.defaultProps = {
   disabled: false,
-  btnType: 'default'
+  btnType: 'default',
+  size:'default',
+  loading: false,
+  ghost: false,
 }
 
-Button.displayName = 'Button'
 export default Button

@@ -1,4 +1,4 @@
-import React, { FC, ReactElement } from 'react'
+import * as React from 'react'
 import Icon from '../Icon'
 import { IconProp } from '@fortawesome/fontawesome-svg-core'
 import classNames from 'classnames'
@@ -6,25 +6,53 @@ import classNames from 'classnames'
 type InputSize = 'lg' | 'sm' 
 
 export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'>{
+  /**
+   * 默认值
+   */
+  defaultValue?: string,
+  /**
+   * 不可用
+   */
   disabled?: boolean,
+  /**
+   * 只读
+   */
   readOnly?: boolean,
+  /**
+   * 大小尺寸
+   */
   size?: InputSize,
+  /**
+   * Input后部添加图标
+   */
   icon?: IconProp,
-  prepend?: string | ReactElement,
-  append?: string  | ReactElement,
-  onChange?:  React.ChangeEventHandler<HTMLInputElement>,
-  hasError?: boolean
+  /**
+   * 前缀
+   */
+  prepend?: string | React.ReactElement,
+  /**
+   * 后缀
+   */
+  append?: string | React.ReactElement,
+  /**
+   * 
+   */
+  onChange?: React.ChangeEventHandler<HTMLInputElement>,
+  /**
+   * 验证是未通过
+   */
+  hasError?: boolean,
 }
 
-const Input: FC<InputProps> = (props) => {
+export const Input: React.FC<InputProps> = (props) => {
   const {
-    disabled=false,
+    disabled,
     size,
     icon,
     prepend,
     append,
     style,
-    hasError=false,
+    hasError,
     ...restProps
   } = props
   const cnames = classNames('cola-input-wrapper', {
@@ -52,6 +80,7 @@ const Input: FC<InputProps> = (props) => {
     delete restProps.defaultValue
     restProps.value = fixControlledValue(props.value)
   }
+  // eye-slash eye
   return (
     <div className={cnames} style={style}>
       {prepend && <div className="cola-input-group-prepend">{prepend}</div>}
@@ -66,5 +95,11 @@ const Input: FC<InputProps> = (props) => {
   )
 }
 
-// Input.displayName = 'Input'
+
+Input.defaultProps = {
+  disabled: false,
+  hasError: false,
+  readOnly: false
+}
+
 export default Input

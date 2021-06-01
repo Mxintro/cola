@@ -57,7 +57,12 @@
     color: $input-placeholder-color;
     opacity: 1;
   }
-  &:disabled,
+  &:disabled {
+    pointer-events: none;
+    background-color: $input-disabled-bg;
+    border-color: $input-disabled-border-color;
+    opacity: 1;
+  }
   &[readonly] {
     // background-color: $input-disabled-bg;
     border-color: $input-disabled-border-color;

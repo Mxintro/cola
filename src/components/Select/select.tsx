@@ -8,9 +8,9 @@ import useClickOutside from '../../hooks/useClickOutside'
 // 用户可定义数据源类型
 
 export interface SelectProps extends Omit<InputProps, 'onSelect'> {
-  onSelect?: (value: string | number) => void,
+  onSelect?: (value: string) => void,
   // 自定义模板
-  defaultValue?: string | number,
+  defaultValue?: string,
   // children?: React.FunctionComponent<OptionProps>
 }
 
@@ -23,11 +23,11 @@ export const Select: React.FC<SelectProps> = ({
   ...restProps
 }) => {
 
-  const [value, setValue] = useState<string | number>(defaultValue)
+  const [value, setValue] = useState<string>(defaultValue)
   const [showDropdown, setshowDropdown] = useState<boolean>(false)
   const [highlightIndex, setHighlightIndex] = useState<number>(-1)
 
-  const selectOptions: Array<string | number> = []
+  const selectOptions: Array<string> = []
 
   const thisComp = useRef<HTMLDivElement>(null)
   useClickOutside(thisComp, ()=> {
@@ -69,12 +69,12 @@ export const Select: React.FC<SelectProps> = ({
     }
   }
 
-  const handleOptionClick = (value: string | number) => {
+  const handleOptionClick = (value: string) => {
     setValue(value)
     onSelect && onSelect(value)
   }
 
-  const addOption = (value: string | number) => {
+  const addOption = (value: string) => {
     selectOptions.push(value)
   }
 

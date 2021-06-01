@@ -1,45 +1,82 @@
-import { Meta, Story, Canvas, ArgsTable  } from '@storybook/addon-docs/blocks';
-import Button from './button'
+import { Meta, Story, Canvas, Props } from '@storybook/addon-docs/blocks';
+import Button from '.'
 
 <Meta title="Button" 
   component={Button}
-  argTypes={{
-    onClick: { action: 'clicked' }
-  }}
   />
 
-# Buttton组件
-按钮
- `import something from `
+# Button组件
 
-export const Template = (args) => <Button {...args } />
+<br/>
 
-<Canvas>
+<Button btnType='primary'>button</Button>
+
+#####
+##### 安装：
+```sh
+  npm install cola-comp --save
+```
+##### 基本用法：
+```js
+import Button from './button'
+<Button btnType='primary'></Button>
+```
+
+##### 各种类型按钮
+<Canvas key={1}>
   <Story name="default" args={{ 
     children: 'default'
   }}>
-    {Template.bind({})}
+    {args => <Button {...args} />}
   </Story>
   <Story name="primary" args={{ 
     children: 'primary',
     btnType: 'primary',
   }}>
-    {Template.bind({})}
+    {args => <Button {...args} />}
   </Story>
   <Story name="danger" args={{ 
     children: 'danger',
     btnType: 'danger'
   }}>
-    {Template.bind({})}
+    {args => <Button {...args} />}
   </Story>
   <Story name="link" args={{ 
     children: 'link',
     btnType: 'link'
   }}>
-    {Template.bind({})}
+    {args => <Button {...args} />}
+  </Story>
+  <Story name="ghost" args={{ 
+    children: 'ghost',
+    btnType: 'primary',
+    ghost: true
+  }}>
+    {args => <Button {...args} />}
+  </Story>
+  <Story name="loading" args={{ 
+    children: 'loading',
+    btnType: 'primary',
+    loading: true
+  }}>
+    {args => <Button {...args} />}
+  </Story>
+  <Story name="disabled" args={{ 
+    children: 'disabled',
+    disabled: true
+  }}>
+    {args => <Button {...args} />}
   </Story>
 </Canvas>
 
-<ArgsTable of={Button} />
+##### 不同尺寸button
+
+<Canvas>
+    <Button btnType='primary' size='lg'>button</Button>
+    <Button btnType='primary' size='default'>button</Button>
+    <Button btnType='primary' size='sm'>button</Button>
+</Canvas>
+
+<Props Story="default"/>
 
 

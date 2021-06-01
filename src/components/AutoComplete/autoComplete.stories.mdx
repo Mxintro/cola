@@ -1,0 +1,38 @@
+import { Meta, Story, Canvas, Props, ArgsTable } from '@storybook/addon-docs/blocks';
+import AutoComplete, { DataSourceType, AutoCompleteProps } from './autoComplete'
+
+<Meta title="AutoComplete" 
+  component={AutoComplete}
+  />
+
+# AutoComplete组件
+
+<br/>
+
+<AutoComplete style={{width: 300}}/>
+
+#####
+##### 安装：
+
+```sh
+  npm install cola-comp --save
+```
+##### 基本用法：
+```js
+import Button from './button'
+```
+
+##### 各种类型AutoComplete
+
+<Canvas>
+  <Story name="default" args={{
+  }}>
+    {args => <AutoComplete {...args} style={{width: 300}}/>}
+  </Story>
+</Canvas>
+
+##### 不同尺寸button
+
+<Props of={AutoComplete}/>
+
+

@@ -62,6 +62,7 @@ function App() {
         <Option value='hg'>gdg</Option>
       </Select>
       <Button btnType='primary'></Button>
+      <Input.Password/>
       {/* <Form 
         initialValues={initialValues}
         onFinish={onFinish}
