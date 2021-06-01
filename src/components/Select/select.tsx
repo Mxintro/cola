@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Input, { InputProps } from '../Input/input'
 import Transition from '../Transition/transition'
-import { OptionProps } from '../Option/option'
+import { OptionProps, OptionValueType } from '../Option'
 import classNames from 'classnames'
 import useClickOutside from '../../hooks/useClickOutside'
 
@@ -23,11 +23,11 @@ export const Select: React.FC<SelectProps> = ({
   ...restProps
 }) => {
 
-  const [value, setValue] = useState<string>(defaultValue)
+  const [value, setValue] = useState<OptionValueType>({value: defaultValue, describe: defaultValue})
   const [showDropdown, setshowDropdown] = useState<boolean>(false)
   const [highlightIndex, setHighlightIndex] = useState<number>(-1)
 
-  const selectOptions: Array<string> = []
+  const selectOptions: Array<OptionValueType> = []
 
   const thisComp = useRef<HTMLDivElement>(null)
   useClickOutside(thisComp, ()=> {
@@ -49,7 +49,6 @@ export const Select: React.FC<SelectProps> = ({
 
   // 处理键盘事件
   const handleKeyDown:React.KeyboardEventHandler<HTMLInputElement> = (e) => {
-    console.log(selectOptions)
     console.log(e.code)
     switch(e.code) {
       case 'ArrowDown':
@@ -59,7 +58,11 @@ export const Select: React.FC<SelectProps> = ({
         highLight(highlightIndex-1)
         break
       case 'Enter':
-        selectOptions[highlightIndex] && handleOptionClick(selectOptions[highlightIndex])
+        if (!showDropdown) {
+          setshowDropdown(true)
+        } else {
+          selectOptions[highlightIndex] && handleOptionClick(selectOptions[highlightIndex])
+        }
         break
       case 'Escape':
         setshowDropdown(false)
@@ -69,13 +72,18 @@ export const Select: React.FC<SelectProps> = ({
     }
   }
 
-  const handleOptionClick = (value: string) => {
+  const handleOptionClick = (value: OptionValueType) => {
     setValue(value)
-    onSelect && onSelect(value)
+    onSelect && onSelect(value.value)
+    setshowDropdown(false)
   }
 
-  const addOption = (value: string) => {
-    selectOptions.push(value)
+  // 获取Option的值
+  const addOption = (option: OptionValueType) => {
+    if (!option.describe){
+      option.describe = option.value
+    }
+    selectOptions.push(option)
   }
 
   const generateDropdown = () => {
@@ -109,12 +117,15 @@ export const Select: React.FC<SelectProps> = ({
   }
  
   return (
-    <div style={style} className="cola-select" ref={thisComp}> 
+    <div 
+      style={style}
+      onClick={() => setshowDropdown(!showDropdown)}
+      className="cola-select" 
+      ref={thisComp}> 
       <Input 
         readOnly
         icon="chevron-down"
-        onClick={() => setshowDropdown(!showDropdown)}
-        value={value}
+        value={value.describe}
         onKeyDown={handleKeyDown}
         {...restProps}></Input>
       {generateDropdown()}

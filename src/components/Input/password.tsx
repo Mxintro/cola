@@ -67,6 +67,7 @@ export const Password: React.FC<PasswordProps> = (props) => {
         className={innerCnames}
         disabled={disabled}
         {...restProps}
+        type={showPassword ? 'text': 'password'}
       />
     </div>
   )

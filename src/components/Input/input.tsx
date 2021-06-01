@@ -2,7 +2,9 @@ import * as React from 'react'
 import Icon from '../Icon'
 import { IconProp } from '@fortawesome/fontawesome-svg-core'
 import classNames from 'classnames'
+import useClickOutside from '../../hooks/useClickOutside'
 
+const { useState, useRef } = React
 type InputSize = 'lg' | 'sm' 
 
 export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'>{
@@ -39,7 +41,7 @@ export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElem
    */
   onChange?: React.ChangeEventHandler<HTMLInputElement>,
   /**
-   * 验证是未通过
+   * 验证未通过
    */
   hasError?: boolean,
 }
@@ -55,16 +57,24 @@ export const Input: React.FC<InputProps> = (props) => {
     hasError,
     ...restProps
   } = props
+
+  const [active, setActive] = useState<boolean>(false)
+
   const cnames = classNames('cola-input-wrapper', {
     [`input-size-${size}`]: size,
     'is-disabled': disabled,
     'input-group': prepend || append,
     'input-group-append': !!append,
-    'input-group-prepend': !!prepend
+    'input-group-prepend': !!prepend,
+  })
+  const thisComp = useRef<HTMLDivElement>(null)
+  useClickOutside(thisComp, ()=> {
+    setActive(false)
   })
 
   const innerCnames = classNames('cola-input-inner',{
-    'input-has-error': hasError
+    'input-has-error': hasError,
+    'is-active': active
     }
   )
 
@@ -81,10 +91,17 @@ export const Input: React.FC<InputProps> = (props) => {
     restProps.value = fixControlledValue(props.value)
   }
   // eye-slash eye
+
   return (
-    <div className={cnames} style={style}>
+    <div
+      className={cnames}
+      style={style}
+      onClick={() => setActive(true)}
+      ref={thisComp}
+      >
       {prepend && <div className="cola-input-group-prepend">{prepend}</div>}
-      {icon && <div className="icon-wrapper"><Icon icon={icon} title={`title-${icon}`}/></div>}
+      {icon && 
+      <div className="icon-wrapper"><Icon icon={icon} title={`title-${icon}`}/></div>}
       <input 
         className={innerCnames}
         disabled={disabled}

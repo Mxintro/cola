@@ -1,5 +1,5 @@
 import { Meta, Story, Canvas, Props, ArgsTable } from '@storybook/addon-docs/blocks';
-import Input, {InputProps} from './input'
+import Input, {InputProps} from './'
 import Icon from '../Icon'
 
 <Meta title="Input" 
@@ -20,8 +20,11 @@ import Icon from '../Icon'
   npm install cola-comp --save
 ```
 ##### 基本用法：
-```js
-import Button from './button'
+```tsx
+import Button from './Input'
+
+<Input placeholder='input' style={{width: 300}}/>
+<Input.Password placeholder='password' style={{width: 300}}/>
 ```
 
 ##### 各种类型Input
@@ -32,7 +35,7 @@ import Button from './button'
   }}>
     {args => <Input {...args} style={{width: 300}}/>}
   </Story>
-  <Story name="Icon" args={{
+  <Story name="添加 icon" args={{
     icon: 'search',
     placeholder: 'Input后部添加图标'
   }}>
@@ -57,11 +60,13 @@ import Button from './button'
     {args => <Input {...args} style={{width: 300}}/>}
   </Story>
   <Story name="password" args={{
+    defaultValue: 'password'
   }}>
     {args => <Input.Password {...args} style={{width: 300}}/>}
   </Story>
 </Canvas>
 
+## API
 <Props of={Input} />
 
 

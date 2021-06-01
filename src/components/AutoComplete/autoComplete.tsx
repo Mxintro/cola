@@ -13,9 +13,17 @@ interface dataBase {
 export type DataSourceType<T = {}> = T & dataBase
 
 export interface AutoCompleteProps extends Omit<InputProps, 'onSelect'> {
+  /**
+   * 搜索补全项的时候调用
+   */
   onSearch?: (value: string) => DataSourceType[] | Promise<DataSourceType[]>,
+  /**
+   * 被选中时调用，参数为选中项的value值
+   */
   onSelect?: (value: string) => void,
-  // 自定义模板
+  /**
+   * 自定义补全项展示模板
+   */ 
   renderOption?: (data: DataSourceType) => React.ReactElement
 }
 
@@ -50,6 +58,7 @@ export const AutoComplete: React.FC<AutoCompleteProps> = ({
   useEffect(() => {
     setSuggestions([])
     if (debounceValue && onSearch && !isSelected.current) {
+      console.log(debounceValue)
       const result = onSearch(debounceValue)
 
       if (result instanceof Promise) {
@@ -71,7 +80,7 @@ export const AutoComplete: React.FC<AutoCompleteProps> = ({
       setshowDropdown(false)
     }
     isSelected.current = false
-  }, [debounceValue]) // 跳过effect，如果debounceValue没变
+  }, [debounceValue, onSearch]) // 跳过effect，如果debounceValue没变
 
   // 处理输入d
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {

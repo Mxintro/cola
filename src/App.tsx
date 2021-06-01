@@ -6,8 +6,7 @@ import Checkbox from './components/Checkbox'
 import { CheckboxGroup } from './components/Checkbox/CheckboxGroup'
 import AutoComplete from './components/AutoComplete'
 import Menu from './components/Menu'
-import Select from './components/Select/select'
-import Option from './components/Option/option'
+import Select, {Option} from './components/Select/'
 
 
 function App() {
@@ -62,7 +61,14 @@ function App() {
         <Option value='hg'>gdg</Option>
       </Select>
       <Button btnType='primary'></Button>
-      <Input.Password/>
+      <Select
+        style={{width: 300}}
+        onSelect={(value)=> console.log(value)}
+        >
+        <Option value='vue'>Vue</Option>
+        <Option value='react'>React</Option>
+        <Option value='typeScript'>TypeScript</Option>
+      </Select>
       {/* <Form 
         initialValues={initialValues}
         onFinish={onFinish}

@@ -1,0 +1,43 @@
+import { Meta, Story, Canvas, Props } from '@storybook/addon-docs/blocks';
+import Icon from '.'
+
+<Meta title="Icon" 
+  component={Icon}
+  />
+
+# Icon组件
+
+<br/>
+
+<Icon btnType='primary'>Icon</Icon>
+
+#####
+##### 安装：
+```sh
+  npm install cola-comp --save
+```
+##### 基本用法：
+```js
+import Icon from './Icon'
+<Icon icon='chevron-down'></Icon>
+```
+
+##### 各种类型按钮
+<Canvas key={1}>
+  <Story name="default" args={{ 
+    icon: 'male'
+  }}>
+    {args => <Icon {...args} />}
+  </Story>
+</Canvas>
+
+##### 不同尺寸Icon
+
+<Canvas>
+    <Icon icon='check'/>
+</Canvas>
+
+## API
+<Props of={Icon}/>
+
+

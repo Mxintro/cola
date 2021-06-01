@@ -6,23 +6,38 @@ import AutoComplete, { DataSourceType, AutoCompleteProps } from './autoComplete'
   />
 
 # AutoComplete组件
+##### 输入框自动完成功能
 
 <br/>
 
-<AutoComplete style={{width: 300}}/>
+export const mockVal = (str, repeat = 1) => ({
+  value: str.repeat(repeat),
+});
+export const onSearch = (searchText) => {
+  setOptions(
+    !searchText ? [] : [mockVal(searchText), mockVal(searchText, 2), mockVal(searchText, 3)],
+  );
+};
 
-#####
-##### 安装：
+<AutoComplete 
+  onSearch={onSearch}
+  onSelect={(value) => console.log(value)}
+  style={{width: 300}}
+/>
+
+<br/>
+
+#### 安装：
 
 ```sh
   npm install cola-comp --save
 ```
-##### 基本用法：
-```js
+#### 基本用法：
+```tsx
 import Button from './button'
 ```
 
-##### 各种类型AutoComplete
+#### 各种类型AutoComplete
 
 <Canvas>
   <Story name="default" args={{

@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { Checkbox } from './Checkbox'
+import  Checkbox  from './checkbox'
 
 const { useState } = React
 
@@ -42,7 +42,7 @@ export const CheckboxGroup: React.FC<CheckboxGroupProps> = ({
   }
 
   return (
-    <div className={className}>
+    <div className={className} {...res}>
       {
         options?.map((item, index)=> (
           <Checkbox

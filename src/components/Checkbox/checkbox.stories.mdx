@@ -1,0 +1,62 @@
+import { Meta, Story, Canvas, Props, ArgsTable } from '@storybook/addon-docs/blocks';
+import Checkbox from './'
+
+
+<Meta title="Checkbox" 
+  component={Checkbox}
+  />
+
+# Checkbox组件
+<br/>
+
+#### 多选框
+<br/>
+
+<Checkbox onChange={(e) => console.log(`checked: ${e.target.checked}`)}>Checkbox</Checkbox>
+<Checkbox disabled>disabled</Checkbox>
+
+#### 安装：
+
+```sh
+  npm install cola-comp --save
+```
+#### 基本用法：
+```tsx
+import Checkbox from './Select'
+<div>
+  <Checkbox onChange={(e) => console.log(`checked: ${e.target.checked}`)}>Checkbox</Checkbox>
+  <Checkbox disabled>disabled</Checkbox>
+  <Checkbox.Group
+    options={[
+      { label: 'Apple', value: 'Apple' },
+      { label: 'Pear', value: 'Pear' },
+      { label: 'Orange', value: 'Orange' },
+    ]}
+    defaultValue={['Apple']}
+    onChange={(res) => console.log(res)}
+  />
+</div>
+```
+
+#### CheckboxGruop
+##### 从数组生成Checkbox组，defaultValue默认选中的选项
+
+<Canvas>
+  <Story name='CheckboxGruop' args={{
+    options: [
+      { label: 'Apple', value: 'Apple' },
+      { label: 'Pear', value: 'Pear' },
+      { label: 'Orange', value: 'Orange' },
+    ],
+    defaultValue: ['Apple'],
+    onChange: (res) => console.log(res)
+  }}>
+    {args => <Checkbox.Group {...args} />}
+  </Story>
+</Canvas>
+
+## API
+<Props of={Checkbox} />
+
+
+

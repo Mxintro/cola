@@ -1,8 +1,14 @@
 import React, { useState } from 'react'
 
 export interface CheckboxProps extends React.InputHTMLAttributes<HTMLInputElement>{
+  /**
+   * 可用
+   */
   disabled?: boolean,
   onChange?:  React.ChangeEventHandler<HTMLInputElement>,
+  /**
+   * 	默认选中的选项
+   */
   defaultChecked?: boolean,
 }
 
@@ -16,7 +22,6 @@ export const Checkbox: React.FC<CheckboxProps> = ({
   const [checked, setChecked] = useState<boolean>(defaultChecked)
 
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    console.log(e.target.checked)
     setChecked(e.target.checked)
     onChange && onChange(e)
   }
@@ -38,3 +43,5 @@ export const Checkbox: React.FC<CheckboxProps> = ({
     </label>
   )
 }
+
+export default Checkbox
