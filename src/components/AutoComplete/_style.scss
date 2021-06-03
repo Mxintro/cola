@@ -13,11 +13,11 @@
   border: $menu-border-width solid $menu-border-color;
   box-shadow: $submenu-box-shadow;
   width: 100%;
+  transition: all 300ms;
   .suggstions-loading-icon {
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 75px;
   }
   .suggestion-item {
     padding: $menu-item-padding-y $menu-item-padding-x;
@@ -25,11 +25,10 @@
     transition: $menu-transition;
     color: $body-color;
     &.is-active {
-      background: $menu-item-active-color !important;
-      color: $white !important;
+      background: $select-option-color !important;
     }
-    &:hover {
-      color: $menu-item-active-color !important;
-    }
+    // &:hover {
+    //   color: $menu-item-active-color !important;
+    // }
   }
 }

@@ -19,7 +19,7 @@
     transition: $menu-transition;
     color: $body-color;
     &.is-active {
-      background: #e6f7ff !important;
+      background: $select-option-color !important;
     }
     &:hover {
       color: $menu-item-active-color !important;

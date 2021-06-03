@@ -1,108 +1,127 @@
-import React, { useState, useEffect, useRef } from 'react'
+import * as React from 'react'
 import Input, { InputProps } from '../Input/input'
 import Transition from '../Transition/transition'
 import Icon from '../Icon'
 import classNames from 'classnames'
-import useDebounce from '../../hooks/useDebounce'
 import useClickOutside from '../../hooks/useClickOutside'
+import { debounce } from '../../utils/utils'
+import { OptionProps, OptionValueType } from '../Option'
+
+
+const { useState, useEffect, useRef, useCallback } = React
 
 // 用户可定义数据源类型
-interface dataBase {
-  value: string
-}
-export type DataSourceType<T = {}> = T & dataBase
+
+export type DataSourceType<T = {}> = T & OptionValueType
 
 export interface AutoCompleteProps extends Omit<InputProps, 'onSelect'> {
   /**
    * 搜索补全项的时候调用
    */
-  onSearch?: (value: string) => DataSourceType[] | Promise<DataSourceType[]>,
+  onSearch: (value: string) => void,
   /**
    * 被选中时调用，参数为选中项的value值
    */
   onSelect?: (value: string) => void,
   /**
-   * 自定义补全项展示模板
-   */ 
-  renderOption?: (data: DataSourceType) => React.ReactElement
+   * 数据化配置选项内容
+   */
+   options?: Array<DataSourceType> 
 }
 
 
+// let count = 0  react一次更新到底render多少次？？showDropdown影响
+// 渲染问题：renderOption自定义渲染，用state不好处理叠加问题，不用state渲染不对
+// options由外部传入，减少组件复杂度，获取数据更灵活
 export const AutoComplete: React.FC<AutoCompleteProps> = ({
   value,
+  options,
   onSearch,
   onSelect,
   style,
-  renderOption,
+  children,
   ...restProps
 }) => {
 
-  // 只在最顶层使用 Hook, 不要在循环，条件或嵌套函数中调用 Hook， 确保总是在你的 React 函数的最顶层调用他们。
-  // 遵守这条规则，你就能确保 Hook 在每一次渲染中都按照同样的顺序被调用。
-  const [inputValue, setValue] = useState<string>(value as string)
-  const [suggestions, setSuggestions] = useState<DataSourceType[]>([])
-  const [showDropdown, setshowDropdown] = useState<boolean>(false)
-  const [Loading, setLoading] = useState<boolean>(false)
+  const [inputValue, setValue] = useState<DataSourceType>({value: ''})
+  
+  const [showDropdown, setShowDropdown] = useState<boolean>(false)
+  // const [Loading, setLoading] = useState<boolean>(false)
   const [highlightIndex, setHighlightIndex] = useState<number>(-1)
+  // 默认false传入数据，true为自定义Option渲染
+  const renderMode = useRef<boolean>(typeof options === 'undefined')
+  
   // 解决选中后，持续加载问题
   const isSelected = useRef(false)
-  // 输入防抖
-  const debounceValue = useDebounce(inputValue, 200)
   // 组件本身
   const thisComp = useRef<HTMLDivElement>(null)
   useClickOutside(thisComp, ()=> {
-    setSuggestions([])
-    setshowDropdown(false)
+    setShowDropdown(false)
   })
 
+  // 尝试不用state？
+  // const [renderOptions, setRenderOptions] = useState<DataSourceType[]>([])
+  // const renderOptions = useRef<DataSourceType[]>([])
+  // console.log(renderOptions )
+  const renderOptions: DataSourceType[] = (renderMode.current || typeof options === 'undefined') ? [] : [...options]
+
+  const childLength = React.Children.count(children)
   useEffect(() => {
-    setSuggestions([])
-    if (debounceValue && onSearch && !isSelected.current) {
-      console.log(debounceValue)
-      const result = onSearch(debounceValue)
-
-      if (result instanceof Promise) {
-        setLoading(true)
-        result.then(res => {
-          setLoading(false)
-          setSuggestions(res)
-          if (res.length > 0) {
-            setshowDropdown(true)
-          }
-        })
-      } else {
-        setSuggestions(result)
-        if (result.length > 0) {
-          setshowDropdown(true)
-        }
-      }
+    console.log('effecteffecteffect')
+    if (renderMode.current || typeof options === 'undefined') {
+      // renderOptions.current = []
+      setShowDropdown(childLength>0)
     } else {
-      setshowDropdown(false)
+      // renderOptions.current = [...options]
+      setShowDropdown(options.length > 0)
     }
-    isSelected.current = false
-  }, [debounceValue, onSearch]) // 跳过effect，如果debounceValue没变
+    isSelected.current=false
+  },[options, children]) 
 
-  // 处理输入d
-  const handleChange: React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    const value = e.target.value.trim()
-    setValue(value)
+  // 点击也可以实现上下拉
+  const handleOnClick = () => {
+    console.log(renderOptions)
+    if (renderOptions.length > 0) {
+      setShowDropdown(!showDropdown)
+    } 
   }
+
+  // 防抖利用useCallback 或者 useRef 返回唯一回调
+  const debounceSearch = useCallback(
+    debounce((value: string)=>{
+      onSearch(value)
+    }, 200),
+    [],
+  )
+
+  const handleChange: React.ChangeEventHandler<HTMLInputElement> = e => {
+      const value = e.target.value.trim()
+      setValue({value})
+      if (value) {
+        debounceSearch(value)
+      } else {
+        setShowDropdown(false)
+        onSearch(value)
+      }
+    }
 
   const handleOnSelect = (sel: DataSourceType) => {
     isSelected.current = true
-    setshowDropdown(false)
-    setValue(sel.value)
-    onSelect  && onSelect (sel.value)
+    setShowDropdown(false)
+    setValue(sel)
+    onSelect && onSelect (sel.value)
   }
 
   // 处理键盘事件
   const highLight = (index: number) => {
-    if (index < 0) index = 0
-    if (index >= suggestions.length) {
-      index = suggestions.length - 1
+    const childrenLength = renderOptions.length
+    if (index < 0) index = childrenLength-1
+    if (index > childrenLength-1) {
+      index = 0
     }
     setHighlightIndex(index)
   }
+
   const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement> ) => {
     switch(e.code) {
       case 'ArrowDown':
@@ -112,12 +131,14 @@ export const AutoComplete: React.FC<AutoCompleteProps> = ({
         highLight(highlightIndex-1)
         break
       case 'Enter':
-        if (suggestions[highlightIndex]) {
-          handleOnSelect(suggestions[highlightIndex])
+        if (renderOptions.length>0) {
+          setShowDropdown(!showDropdown)
+        } else {
+          renderOptions[highlightIndex] && handleOnSelect(renderOptions[highlightIndex])
         }
         break
       case 'Escape':
-        setshowDropdown(false)
+        setShowDropdown(false)
         break
       default:
         break
@@ -125,9 +146,54 @@ export const AutoComplete: React.FC<AutoCompleteProps> = ({
 
   }
 
+  // 获取Option的值
+  const addOption = (option: OptionValueType) => {
+    console.log(option)
+    if (!option.describe){
+      option.describe = option.value
+    }
+    renderOptions.push(option)
+  }
 
-  const renderTemplate = (item: DataSourceType) => {
-    return renderOption ? renderOption(item) : item.value
+  // 分options传入和 自定义Option组件传入两种情况
+  const renderTemplate = () => {
+    console.log('renderrenderrenderrenderrenderrender')
+    console.log(showDropdown)
+    if (renderMode.current) {
+      return React.Children.map(children, (child, index) => {
+        const cnames = classNames('suggestion-item', {
+          'is-active': index === highlightIndex
+        })
+        const childEl = child as React.FunctionComponentElement<OptionProps>
+        if (childEl.type.displayName === 'Option') {
+          // 解决渲染问题
+          renderOptions.push({value: childEl.props.value})
+          return (
+            <li
+            key={index}
+            className={cnames}
+            >
+            {React.cloneElement(childEl, {onClick: handleOnSelect})}
+            </li>)
+        } else {
+          throw new Error('AutoComplete only accepts Opiton component as Children');
+        }
+      })
+    } else {
+      return options && options.map((item, index) => {
+        const cnames = classNames('suggestion-item', {
+          'is-active': index === highlightIndex
+        })
+        return <li
+          key={index}
+          className={cnames}
+          onMouseEnter={()=>setHighlightIndex(index)}
+          onClick={() => handleOnSelect(item)}
+          >
+          {item.value}
+          </li>
+      })
+    }
   }
 
   const generateDropdown = () => {
@@ -138,35 +204,21 @@ export const AutoComplete: React.FC<AutoCompleteProps> = ({
         animation='zoom-in-top'
       >
         <ul className="cola-suggestion-list">
-        { Loading &&
-            <div className="suggstions-loading-icon">
-              <Icon icon="spinner" spin/>
-            </div>
-          }
-          {
-            suggestions.map((item, index) => {
-              const cnames = classNames('suggestion-item', {
-                'is-active': index === highlightIndex
-              })
-              return <li
-                key={index}
-                className={cnames}
-                onClick={() => handleOnSelect(item)}
-                >
-                {renderTemplate(item)}
-                </li>
-            })
-          }
+          { renderTemplate()}
         </ul>
       </Transition>
     )
   }
  
   return (
-    <div style={style} className="cola-auto-complete" ref={thisComp}> 
+    <div 
+      style={style}
+      className="cola-auto-complete"
+      onClick={handleOnClick}
+      ref={thisComp}> 
       <Input 
         onChange={handleChange}
-        value={inputValue}
+        value={inputValue.value}
         onKeyDown={handleKeyDown}
         {...restProps}></Input>
       {generateDropdown()}

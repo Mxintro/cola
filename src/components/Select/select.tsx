@@ -11,6 +11,7 @@ export interface SelectProps extends Omit<InputProps, 'onSelect'> {
   onSelect?: (value: string) => void,
   // 自定义模板
   defaultValue?: string,
+  options?: Array<any>,
   // children?: React.FunctionComponent<OptionProps>
 }
 
@@ -36,7 +37,6 @@ export const Select: React.FC<SelectProps> = ({
 
 
   const highLight = (index: number) => {
-    console.log(index)
 
     const childrenLength = selectOptions.length
 
@@ -72,6 +72,7 @@ export const Select: React.FC<SelectProps> = ({
     }
   }
 
+  //  
   const handleOptionClick = (value: OptionValueType) => {
     setValue(value)
     onSelect && onSelect(value.value)
@@ -100,7 +101,7 @@ export const Select: React.FC<SelectProps> = ({
                 'is-active': index === highlightIndex
               })
               const childEl = child as React.FunctionComponentElement<OptionProps>
-              if (childEl.type.name === 'Option') {
+              if (childEl.type.displayName === 'Option') {
                 return (
                   <li
                   key={index}

@@ -1,4 +1,5 @@
-import React, { useEffect} from 'react'
+import * as React from 'react'
+// import { AcContext } from '../AutoComplete'
 
 export interface OptionValueType {
   value: string, 
@@ -16,22 +17,32 @@ export interface OptionProps {
   label?: React.ReactNode;
   children?: string
   /** @deprecated Only works when use `children` as option data */
-  // children?: React.ReactNode;
+  // children?: React.ReactNode;P
 }
 
 export const Option: React.FC<OptionProps> = ({
   value='',
-  children,
+  children='',
   onClick,
   addOption,
   ...res
 }) => {
-  useEffect(()=> {
+  // const dispatch = React.useContext(AcContext);
+  React.useEffect(()=> {
+    // dispatch({
+    //   type: 'pushOptions',
+    //   payload: {
+    //     value: {
+    //       value, describe: children
+    //     }
+    //   }
+    // })
     addOption && addOption({value, describe: children})
-  })
+  },[])
   return (
-    <div onClick={()=> onClick && onClick({value, describe: children})} {...res}>{children}</div>
+    <div onClick={()=> onClick && onClick({value, describe: children})} {...res}>{children || value}</div>
   )
 }
 
-export default Option
+
+export default React.memo(Option) 

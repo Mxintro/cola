@@ -1,7 +1,7 @@
 import { FC } from 'react'
 import Select, { SelectProps } from './select'
-import Option , { OptionProps } from '../Option/option'
-export * from '../Option/option'
+import Option , { OptionProps } from '../Option'
+export * from '../Option'
 export * from './select'
 
 export type SelectType = FC<SelectProps> & {

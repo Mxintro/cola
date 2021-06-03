@@ -72,3 +72,18 @@ export function getValueFromEvent (...args: any[]) {
   const e = args[0] as React.ChangeEvent<any>
   return e && e.target ? (e.target.type === 'checkbox' ? e.target.checked : e.target.value) : e
 }
+
+
+export function debounce<T extends any[]>(
+  callback: (...args: T) => any,
+  delay: number
+  ): (...args: T) => void {
+    let timer:any  = null
+    return (...args: T) => {
+      timer && clearTimeout(timer as NodeJS.Timeout)
+      timer = setTimeout(()=> {
+        timer = null
+        callback(...args)
+      }, delay)
+    }
+}

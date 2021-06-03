@@ -3,13 +3,15 @@ import Button from './components/Button'
 import Input from './components/Input'
 import Form from './components/Form'
 import Checkbox from './components/Checkbox'
-import { CheckboxGroup } from './components/Checkbox/CheckboxGroup'
 import AutoComplete from './components/AutoComplete'
 import Menu from './components/Menu'
-import Select, {Option} from './components/Select/'
+import Select from './components/Select/'
 
+const {Option} = AutoComplete
 
 function App() {
+
+  const [options, setOptions] = useState<{ value: string }[]>([])
 
   const initialValues = {
     name: 'hello',
@@ -28,7 +30,7 @@ function App() {
   }
   
   const plainOptions = ['Apple', 'Pear', 'Orange'];
-  const options = [
+  const optionsD = [
     { label: 'Apple', value: 'Apple' },
     { label: 'Pear', value: 'Pear' },
     { label: 'Orange', value: 'Orange' },
@@ -39,8 +41,8 @@ function App() {
   ]  
 
   const handleFetchGeneral = (value: string) => {
-    const res = dataGeneral.filter(item => item.includes(value)).map(item => ({ value: item}))
-    return [...res]
+    const res = value ? dataGeneral.filter(item => item.includes(value)).map(item => ({ value: item})) : []
+    setOptions([...res])
   }
 
   const onSelect = (value: any) => {
@@ -51,24 +53,37 @@ function App() {
   return (
     <div className="App" >
 
+      <AutoComplete 
+        options={options}
+        style={{width:300}}
+        onSelect={onSelect}
+        onSearch={handleFetchGeneral}>
+      </AutoComplete>
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
+      <br />
       {/* <AutoComplete 
         style={{width:300}}
         onSelect={onSelect}
         onSearch={handleFetchGeneral}>
+          {options.map(item => (
+            <Option key={item.value} value={item.value}></Option>
+          ))}
       </AutoComplete> */}
-      <Select defaultValue='hhhh' style={{width: 400}}>
-        <Option value='fd'>fdf</Option>
-        <Option value='hg'>gdg</Option>
-      </Select>
-      <Button btnType='primary'></Button>
-      <Select
+
+      {/* <Select
         style={{width: 300}}
         onSelect={(value)=> console.log(value)}
         >
         <Option value='vue'>Vue</Option>
         <Option value='react'>React</Option>
         <Option value='typeScript'>TypeScript</Option>
-      </Select>
+      </Select> */}
       {/* <Form 
         initialValues={initialValues}
         onFinish={onFinish}
