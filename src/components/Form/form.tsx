@@ -1,28 +1,34 @@
 import React from 'react'
 import FormStore from './formStore'
-import FormItem, { FormItemProps } from './formItem'
 
 export interface FormProps {
+  /**
+   * 初始化表单数据
+   */
   initialValues?: Object,
-  className?: string,
-  children?: React.ReactNode,
+  /**
+   * 提交表单且数据验证成功后回调事件
+   */
   onFinish?: (value: any | undefined) => void,
+  /**
+   * 提交表单且数据验证失败后回调事件
+   */
   onFinishFailed?: (value: any | undefined) => void,
+  /**
+   * 设置表单样式
+   */
   style?: React.CSSProperties
 }
 
 export const FormStoreContext = React.createContext<FormStore | undefined>(undefined)
 
-const Form: React.FC<FormProps> = ({
+export const Form: React.FC<FormProps> = ({
   initialValues = {},
-  className,
   children,
   onFinish = () => {},
   onFinishFailed = () => {},
   ...resProps
 }) => {
-
-  console.log('form render')
   const store = new FormStore(initialValues)
   const onSubmit:React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault()
@@ -48,10 +54,5 @@ const Form: React.FC<FormProps> = ({
   )
 }
 
-type TForm = React.FC<FormProps> & {
-  Item: React.FC<FormItemProps>
-}
-const FormWithItem = Form as TForm
-FormWithItem.Item = FormItem
 
-export default FormWithItem
+export default Form

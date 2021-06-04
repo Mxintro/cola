@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef, ReactElement} from 'react'
+import React, { useState, useEffect, useRef } from 'react'
+
 import { FormStoreContext } from './form'
 import { RuleItem } from 'async-validator';
 import { InputProps } from '../Input'
@@ -10,13 +11,22 @@ import classNames from 'classnames'
 
 export interface FormItemProps {
   className?: string,
+  /**
+   * label 标签的文本
+   */
   label?: string,
+  /**
+   * 字段名，对应表单中键值
+   */
   name?: string,
+  /**
+   * 校验规则，基于async-validator设置字段的校验逻辑
+   */
   rules?: RuleItem | RuleItem[],
 }
- type ItemChild = InputProps | ButtonProps | AutoCompleteProps | SelectProps
+ type ItemChild = InputProps | AutoCompleteProps | SelectProps
 
-const FormItem: React.FC<FormItemProps> = ({
+export const FormItem: React.FC<FormItemProps> = ({
   name, 
   className,
   children,

@@ -1,5 +1,13 @@
-import Form from './form'
-export { default as FormItem } from './formItem'
-export { default as FormStore } from './formStore'
+import Form, {FormProps} from './form'
+import FormItem, { FormItemProps } from './formItem'
+export * from './formItem'
+export * from './form'
+export * from './formStore'
 
-export default Form
+type TForm = React.FC<FormProps> & {
+  Item: React.FC<FormItemProps>
+}
+const FormWithItem = Form as TForm
+FormWithItem.Item = FormItem
+
+export default FormWithItem
