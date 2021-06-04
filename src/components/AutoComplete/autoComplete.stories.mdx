@@ -1,5 +1,8 @@
-import { Meta, Story, Canvas, Props, ArgsTable } from '@storybook/addon-docs/blocks';
+import { Meta, Story, Canvas, Props, ArgsTable } from '@storybook/addon-docs/blocks'
 import AutoComplete, { DataSourceType, AutoCompleteProps } from './autoComplete'
+import Complete from './storybookShow'
+import { useState } from 'react';
+
 
 <Meta title="AutoComplete" 
   component={AutoComplete}
@@ -10,20 +13,7 @@ import AutoComplete, { DataSourceType, AutoCompleteProps } from './autoComplete'
 
 <br/>
 
-export const mockVal = (str, repeat = 1) => ({
-  value: str.repeat(repeat),
-});
-export const onSearch = (searchText) => {
-  setOptions(
-    !searchText ? [] : [mockVal(searchText), mockVal(searchText, 2), mockVal(searchText, 3)],
-  );
-};
-
-<AutoComplete 
-  onSearch={onSearch}
-  onSelect={(value) => console.log(value)}
-  style={{width: 300}}
-/>
+<Complete />
 
 <br/>
 
@@ -33,16 +23,78 @@ export const onSearch = (searchText) => {
   npm install cola-comp --save
 ```
 #### 基本用法：
+##### onSearch得到搜索值，通过options设置数据源
 ```tsx
-import Button from './button'
+import React, { useState } from 'react'
+import AutoComplete, { DataSourceType, AutoCompleteProps } from './autoComplete'
+
+const helloTo = (str: string, repeat: number = 1):DataSourceType => ({
+  value: 'hello ' + str.repeat(repeat), 
+})
+
+const Complete:React.FC = () => {
+  const [options, setOptions] = useState<DataSourceType[]>([])
+
+  const onSearch = (searchText:string) => {
+    setOptions(
+      !searchText ? [] : [helloTo(searchText), helloTo(searchText, 2), helloTo(searchText, 3)],
+    )
+  }
+
+  const onSelect = (data: string) => {
+    console.log('onSelect', data)
+  }
+
+  return (
+    <>
+      <AutoComplete
+        options={options}
+        style={{ width: 300 }}
+        onSelect={onSelect}
+        onSearch={onSearch}
+        placeholder="input here"
+      />
+    </>
+  )
+}
+
 ```
 
-#### 各种类型AutoComplete
+#### 自定义选项
+##### 不使用options设置数据源，直接通过AutoComplete.Options展示数据
 
 <Canvas>
-  <Story name="default" args={{
-  }}>
-    {args => <AutoComplete {...args} style={{width: 300}}/>}
+  <Story name="Options">
+    {() => {
+      const [options, setOptions] = useState([])
+      const helloTo = (str, repeat=1) => ({
+        value: 'hello ' + str.repeat(repeat), 
+      })
+      const onSearch = (searchText) => {
+        setOptions(
+          !searchText ? [] : [helloTo(searchText), helloTo(searchText, 2), helloTo(searchText, 3)],
+        )
+      }
+      const onSelect = (data) => {
+        console.log('onSelect', data)
+      }
+      return(
+        <AutoComplete 
+          style={{width: 300}}
+          options={options}
+          onSearch={onSearch}
+          onSelect={onSelect}
+          placeholder="Custom options">
+            {options.map(item => (
+              <AutoComplete.Option
+                key={item.value}
+                value={item.value}>
+                {item.value}
+              </AutoComplete.Option>
+            ))}
+        </AutoComplete>
+      )
+    }}
   </Story>
 </Canvas>
 

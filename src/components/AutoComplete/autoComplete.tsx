@@ -1,17 +1,14 @@
 import * as React from 'react'
 import Input, { InputProps } from '../Input/input'
 import Transition from '../Transition/transition'
-import Icon from '../Icon'
 import classNames from 'classnames'
 import useClickOutside from '../../hooks/useClickOutside'
 import { debounce } from '../../utils/utils'
 import { OptionProps, OptionValueType } from '../Option'
 
-
 const { useState, useEffect, useRef, useCallback } = React
 
 // 用户可定义数据源类型
-
 export type DataSourceType<T = {}> = T & OptionValueType
 
 export interface AutoCompleteProps extends Omit<InputProps, 'onSelect'> {
@@ -29,8 +26,7 @@ export interface AutoCompleteProps extends Omit<InputProps, 'onSelect'> {
    options?: Array<DataSourceType> 
 }
 
-
-// let count = 0  react一次更新到底render多少次？？showDropdown影响
+// showDropdown会直接使children不渲染
 // 渲染问题：renderOption自定义渲染，用state不好处理叠加问题，不用state渲染不对
 // options由外部传入，减少组件复杂度，获取数据更灵活
 export const AutoComplete: React.FC<AutoCompleteProps> = ({
@@ -60,25 +56,20 @@ export const AutoComplete: React.FC<AutoCompleteProps> = ({
   })
 
   // 尝试不用state？
-  // const [renderOptions, setRenderOptions] = useState<DataSourceType[]>([])
-  // const renderOptions = useRef<DataSourceType[]>([])
-  // console.log(renderOptions )
   const renderOptions: DataSourceType[] = (renderMode.current || typeof options === 'undefined') ? [] : [...options]
 
   const childLength = React.Children.count(children)
   useEffect(() => {
     console.log('effecteffecteffect')
     if (renderMode.current || typeof options === 'undefined') {
-      // renderOptions.current = []
       setShowDropdown(childLength>0)
     } else {
-      // renderOptions.current = [...options]
       setShowDropdown(options.length > 0)
     }
     isSelected.current=false
   },[options, children]) 
 
-  // 点击也可以实现上下拉
+  // 点击也可以实现收放
   const handleOnClick = () => {
     console.log(renderOptions)
     if (renderOptions.length > 0) {
@@ -143,16 +134,6 @@ export const AutoComplete: React.FC<AutoCompleteProps> = ({
       default:
         break
     }
-
-  }
-
-  // 获取Option的值
-  const addOption = (option: OptionValueType) => {
-    console.log(option)
-    if (!option.describe){
-      option.describe = option.value
-    }
-    renderOptions.push(option)
   }
 
   // 分options传入和 自定义Option组件传入两种情况
