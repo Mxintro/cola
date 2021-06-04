@@ -4,6 +4,7 @@ import { RuleItem } from 'async-validator';
 import { InputProps } from '../Input'
 import { ButtonProps } from '../Button'
 import { AutoCompleteProps } from '../AutoComplete'
+import { SelectProps } from '../Select'
 import useDebounce from '../../hooks/useDebounce'
 import classNames from 'classnames'
 
@@ -12,9 +13,8 @@ export interface FormItemProps {
   label?: string,
   name?: string,
   rules?: RuleItem | RuleItem[],
-  // children?: React.ElementType<any>
 }
- type ItemChild = InputProps | ButtonProps | AutoCompleteProps
+ type ItemChild = InputProps | ButtonProps | AutoCompleteProps | SelectProps
 
 const FormItem: React.FC<FormItemProps> = ({
   name, 
@@ -50,12 +50,20 @@ const FormItem: React.FC<FormItemProps> = ({
     })
   },[debounceValue])
 
-  const onChange:React.ChangeEventHandler<HTMLInputElement> = (e) => {
-    if (e.target.type === 'checkbox') {
-      setValue(e.target.checked)
+  type onChangeType = React.ChangeEventHandler<HTMLInputElement> | ((value: any) => void)
+  const onChange:onChangeType = (e: any) => {
+    console.log('change')
+
+    if (e.target) {
+      if (e.target.type === 'checkbox') {
+        setValue(e.target.checked)
+      } else {
+        setValue(e.target.value)
+      }
     } else {
-      setValue(e.target.value)
+      setValue(e)
     }
+    
   }
 
   // 是否必填
@@ -70,19 +78,19 @@ const FormItem: React.FC<FormItemProps> = ({
 
   const renderChildren = () => { 
     return React.Children.map(children, child => {
-      const childEl = child as React.FunctionComponentElement<ItemChild>
-
+      const childEl = child 
       return handleChildren(childEl)
     })
 
   }
 
 // 多层查找Input
- function handleChildren(child: React.FunctionComponentElement<ItemChild>) {
-  console.log(child?.type.name)
-
+ function handleChildren(child: any) {
    if (!child) return
    if (child?.type.name !== 'Button'){
+     if (child.type.name === 'Checkbox') {
+      return React.cloneElement(child, {onChange, defaultChecked: value})
+     }
      const childProps = { value, onChange, hasError: errorMsg !== ''}
      return React.cloneElement(child, childProps)
    } else {
@@ -90,9 +98,8 @@ const FormItem: React.FC<FormItemProps> = ({
    }
  }
 
-  const classes = classNames('form-item', {
+  const classes = classNames('form-item', className, {
     'is-reqiured': isReqiured(rules),
-    // 'form-input-failed': errorMsg !== ''
   })
 
   return (   

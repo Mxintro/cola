@@ -5,7 +5,7 @@ export interface CheckboxProps extends React.InputHTMLAttributes<HTMLInputElemen
    * 可用
    */
   disabled?: boolean,
-  onChange?:  React.ChangeEventHandler<HTMLInputElement>,
+  onChange?: React.ChangeEventHandler<HTMLInputElement>,
   /**
    * 	默认选中的选项
    */

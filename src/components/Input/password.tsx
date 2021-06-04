@@ -2,7 +2,7 @@ import * as React from 'react'
 import Icon from '../Icon'
 import classNames from 'classnames'
 
-const { useState } = React
+const { useState, useRef } = React
 
 type InputSize = 'lg' | 'sm' 
 
@@ -27,7 +27,9 @@ export const Password: React.FC<PasswordProps> = (props) => {
     style,
     ...restProps
   } = props
+
   const [showPassword, setShowPassword] = useState<boolean>(false)
+  const inputEl = useRef<HTMLInputElement>(null)
 
   const cnames = classNames('cola-input-wrapper', {
     [`input-size-${size}`]: size
@@ -54,16 +56,23 @@ export const Password: React.FC<PasswordProps> = (props) => {
   
   const handleShowPassword:React.MouseEventHandler<HTMLDivElement> = () => {
     setShowPassword(!showPassword)
-
   }
+  const handleClick = ()=> {
+    inputEl.current?.focus()
+  }
+
   return (
-    <div className={cnames} style={style}>
+    <div
+    onClick={handleClick}
+      className={cnames}
+      style={style}>
       <div className="icon-wrapper"
         onClick={handleShowPassword}
         >
         <Icon icon={ showPassword ? 'eye' : 'eye-slash'}/>
       </div>
       <input 
+        ref={inputEl}
         className={innerCnames}
         disabled={disabled}
         {...restProps}

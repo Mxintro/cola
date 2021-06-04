@@ -10,6 +10,7 @@ export default class FormStore <T extends Object = any>{
   // 一个map结构
   private rulesList: Rules = {}
   private errorsList:  { [key: string]: string } = {}
+  private isResetting: boolean = false
 
   constructor(value: T) {
     this.initialValues = value
@@ -26,10 +27,10 @@ export default class FormStore <T extends Object = any>{
 
   set(name: string, value: any, validate: boolean) {
     deepSet(this.values, name, value)
-    console.log('set')
-    if (validate) {
+    if (validate && !this.isResetting) {
       this.validate(name).then().catch(e =>console.log(e))
     }
+    this.isResetting = false
   }
 
   addRules(name: string, rules: RuleItem | RuleItem[]) {
@@ -41,6 +42,7 @@ export default class FormStore <T extends Object = any>{
   }
   
   reset() {
+    this.isResetting = true
     this.values = deepCopy(this.initialValues)
     this.errorsList = {}
     this.notify('*')
@@ -56,6 +58,7 @@ export default class FormStore <T extends Object = any>{
     }
   }
 
+  // 关键异步，这样确保listener回调已经添加
   async validate(name: string) {
     const descriptor: Rules = {}
     descriptor[name] = this.rulesList[name]

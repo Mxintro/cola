@@ -2,9 +2,8 @@ import * as React from 'react'
 import Icon from '../Icon'
 import { IconProp } from '@fortawesome/fontawesome-svg-core'
 import classNames from 'classnames'
-import useClickOutside from '../../hooks/useClickOutside'
 
-const { useState, useRef } = React
+const { useRef } = React
 type InputSize = 'lg' | 'sm' 
 
 export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size'>{
@@ -55,10 +54,11 @@ export const Input: React.FC<InputProps> = (props) => {
     append,
     style,
     hasError,
+    className,
     ...restProps
   } = props
 
-  const [active, setActive] = useState<boolean>(false)
+  const inputEl = useRef<HTMLInputElement>(null)
 
   const cnames = classNames('cola-input-wrapper', {
     [`input-size-${size}`]: size,
@@ -67,14 +67,9 @@ export const Input: React.FC<InputProps> = (props) => {
     'input-group-append': !!append,
     'input-group-prepend': !!prepend,
   })
-  const thisComp = useRef<HTMLDivElement>(null)
-  useClickOutside(thisComp, ()=> {
-    setActive(false)
-  })
 
-  const innerCnames = classNames('cola-input-inner',{
+  const innerCnames = classNames('cola-input-inner', className,{
     'input-has-error': hasError,
-    'is-active': active
     }
   )
 
@@ -90,19 +85,22 @@ export const Input: React.FC<InputProps> = (props) => {
     delete restProps.defaultValue
     restProps.value = fixControlledValue(props.value)
   }
-  // eye-slash eye
+
+  const handleClick = ()=> {
+    inputEl.current?.focus()
+  }
 
   return (
     <div
       className={cnames}
       style={style}
-      onClick={() => setActive(true)}
-      ref={thisComp}
+      onClick={handleClick}
       >
       {prepend && <div className="cola-input-group-prepend">{prepend}</div>}
       {icon && 
       <div className="icon-wrapper"><Icon icon={icon} title={`title-${icon}`}/></div>}
       <input 
+        ref={inputEl}
         className={innerCnames}
         disabled={disabled}
         {...restProps}

@@ -22,6 +22,7 @@ const Form: React.FC<FormProps> = ({
   ...resProps
 }) => {
 
+  console.log('form render')
   const store = new FormStore(initialValues)
   const onSubmit:React.FormEventHandler<HTMLFormElement> = (e) => {
     e.preventDefault()

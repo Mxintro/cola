@@ -3,19 +3,20 @@ import Button from './components/Button'
 import Input from './components/Input'
 import Form from './components/Form'
 import Checkbox from './components/Checkbox'
-import AutoComplete from './components/AutoComplete'
+import AutoComplete,{ DataSourceType, AutoCompleteProps } from './components/AutoComplete'
 import Menu from './components/Menu'
 import Select from './components/Select/'
 
-const {Option} = AutoComplete
+const {Option} = Select
 
 function App() {
 
-  const [options, setOptions] = useState<{ value: string }[]>([])
 
   const initialValues = {
     name: 'hello',
-    password:''
+    password: '',
+    remmeber: true,
+    phone: '',
   }
 
   const onFinish = (values: any) => {
@@ -29,62 +30,27 @@ function App() {
     console.log('checked = ', checkedValues);
   }
   
-  const plainOptions = ['Apple', 'Pear', 'Orange'];
-  const optionsD = [
-    { label: 'Apple', value: 'Apple' },
-    { label: 'Pear', value: 'Pear' },
-    { label: 'Orange', value: 'Orange' },
-  ];
-
-  const dataGeneral = [ 
-    'hello', 'react', 'java', 'javaScript', 'typeScript', 'python', 'vue', 'node', 'docker', 'go', 
-  ]  
-
-  const handleFetchGeneral = (value: string) => {
-    const res = value ? dataGeneral.filter(item => item.includes(value)).map(item => ({ value: item})) : []
-    setOptions([...res])
-  }
-
-  const onSelect = (value: any) => {
-    console.log('select:' + value)
-  }
+  const plainOptions = ['Apple', 'Pear', 'Orange'].map(value => ({value: value}))
 
   const [tran, setTran] = useState(false)
+
+  const helloTo = (str: string, repeat: number = 1):DataSourceType => ({
+    value: 'hello ' + str.repeat(repeat), 
+  })
+  const [options, setOptions] = useState<DataSourceType[]>([])
+
+  const onSearch = (searchText:string) => {
+    setOptions(
+      !searchText ? [] : [helloTo(searchText), helloTo(searchText, 2), helloTo(searchText, 3)],
+    )
+  }
+
+  const onSelect = (data: string) => {
+    console.log('onSelect', data)
+  }
   return (
     <div className="App" >
-
-      <AutoComplete 
-        options={options}
-        style={{width:300}}
-        onSelect={onSelect}
-        onSearch={handleFetchGeneral}>
-      </AutoComplete>
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      <br />
-      {/* <AutoComplete 
-        style={{width:300}}
-        onSelect={onSelect}
-        onSearch={handleFetchGeneral}>
-          {options.map(item => (
-            <Option key={item.value} value={item.value}></Option>
-          ))}
-      </AutoComplete> */}
-
-      {/* <Select
-        style={{width: 300}}
-        onSelect={(value)=> console.log(value)}
-        >
-        <Option value='vue'>Vue</Option>
-        <Option value='react'>React</Option>
-        <Option value='typeScript'>TypeScript</Option>
-      </Select> */}
-      {/* <Form 
+      <Form 
         initialValues={initialValues}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
@@ -94,26 +60,46 @@ function App() {
           label='用户名'
           rules={[{ required: true, message: '不能为空' }]}
           >
-          <Input></Input>
+          <Input/>
         </Form.Item>
         <Form.Item 
           name="password"
           label='密码'
-          rules={[{required: true, message: '不能为空' }]}
+          rules={[
+            {required: true, message: '不能为空' },
+            { min: 6, message: '最少6位数'}
+          ]}
           >
-          <Input placeholder="input placeholder"></Input>
+          <Input.Password placeholder="input placeholder" />
         </Form.Item>
-        <Form.Item name="remember">
-          <Checkbox  defaultChecked>hhhh</Checkbox>
-        </Form.Item>  
+        <Form.Item name="remmeber">
+          <Checkbox>记住密码</Checkbox>
+        </Form.Item>
+        <Form.Item 
+          name="gender"
+          label='性别'
+          rules={[{required: true, message: '请选择性别' }]}
+          >
+          <Select 
+            placeholder='请选择性别'
+          >
+            <Option value='男生'></Option>
+            <Option value='女生'></Option>
+          </Select>
+        </Form.Item>
+        <Form.Item
+          name="phone" 
+          label='手机'
+          rules={[{ pattern:/^(?:(?:\+|00)86)?1[3-9]\d{9}$/, message: '手机格式不符' }]}
+          >
+          <Input/>
+        </Form.Item>
         <Form.Item>
           <Button btnType='primary' type='submit'>submit</Button>
           <Button type='reset'>reset</Button>
         </Form.Item>
       </Form>
-      <CheckboxGroup onChange={onChange} options={options} defaultValue={['Apple']}>
 
-      </CheckboxGroup> */}
     </div>
   );
 }

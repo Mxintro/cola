@@ -1,5 +1,8 @@
 .cola-select {
-  position: relative;
+  // position: relative;
+  .change-color {
+    color: $gray-500!important;
+  }
 }
 .cola-select-list {
   list-style:none;
@@ -13,6 +16,12 @@
   border: $menu-border-width solid $menu-border-color;
   box-shadow: $submenu-box-shadow;
   width: 100%;
+  transition: all 300ms;
+  .suggstions-loading-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
   .select-item {
     padding: $menu-item-padding-y $menu-item-padding-x;
     cursor: pointer;
@@ -20,9 +29,6 @@
     color: $body-color;
     &.is-active {
       background: $select-option-color !important;
-    }
-    &:hover {
-      color: $menu-item-active-color !important;
     }
   }
 }

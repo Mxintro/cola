@@ -10,23 +10,23 @@ interface OptionsItem {
 
 export interface CheckboxGroupProps {
   options?: OptionsItem[],
-  defaultValue?: string[],
+  defaultChecked?: string[],
   onChange?: (value: any) => void,
   className?: string,
 }
 
 export const CheckboxGroup: React.FC<CheckboxGroupProps> = ({
   options=[],
-  defaultValue=[],
+  defaultChecked=[],
   onChange,
   className,
   ...res
 }) => {
 
-  const [checkedValues, setCheckedValues] = useState([...defaultValue] || [])
+  const [checkedValues, setCheckedValues] = useState([...defaultChecked] || [])
 
   const isDefault = (value: string) => {
-    return defaultValue?.includes(value)
+    return defaultChecked?.includes(value)
   }
 
   const handleOnChange = (e:React.ChangeEvent<HTMLInputElement>, value: string) => {
@@ -48,7 +48,7 @@ export const CheckboxGroup: React.FC<CheckboxGroupProps> = ({
           <Checkbox
             key={item.value}
             onChange={(e) => handleOnChange(e, item.value)}
-            defaultChecked={defaultValue.includes(item.value)}>
+            defaultChecked={defaultChecked.includes(item.value)}>
             {item.label}
           </Checkbox>
         ))
