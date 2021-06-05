@@ -3,22 +3,17 @@ import Button from './components/Button'
 import Input from './components/Input'
 import Form from './components/Form'
 import Checkbox from './components/Checkbox'
-import AutoComplete,{ DataSourceType, AutoCompleteProps } from './components/AutoComplete'
-import Menu from './components/Menu'
 import Select from './components/Select/'
 
 const {Option} = Select
 
 function App() {
-
-
   const initialValues = {
     name: 'hello',
     password: '',
     remmeber: true,
     phone: '',
   }
-
   const onFinish = (values: any) => {
     console.log(values);
   }
@@ -26,28 +21,6 @@ function App() {
     console.log(values)
   }
 
-  function onChange(checkedValues: any) {
-    console.log('checked = ', checkedValues);
-  }
-  
-  const plainOptions = ['Apple', 'Pear', 'Orange'].map(value => ({value: value}))
-
-  const [tran, setTran] = useState(false)
-
-  const helloTo = (str: string, repeat: number = 1):DataSourceType => ({
-    value: 'hello ' + str.repeat(repeat), 
-  })
-  const [options, setOptions] = useState<DataSourceType[]>([])
-
-  const onSearch = (searchText:string) => {
-    setOptions(
-      !searchText ? [] : [helloTo(searchText), helloTo(searchText, 2), helloTo(searchText, 3)],
-    )
-  }
-
-  const onSelect = (data: string) => {
-    console.log('onSelect', data)
-  }
   return (
     <div className="App" >
       <Form 
@@ -99,7 +72,6 @@ function App() {
           <Button type='reset'>reset</Button>
         </Form.Item>
       </Form>
-
     </div>
   );
 }

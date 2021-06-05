@@ -6,11 +6,17 @@ import { CSSTransition } from 'react-transition-group'
 
 export interface SubMenuProps {
   index?: string;
-  title: string;
+  /**
+   * 下拉菜单的字段
+   */
+  title?: string;
+  /**
+   * 选项扩展的 className
+   */
   className?: string
 }
 
-const SubMenu: FC<SubMenuProps> = ({ index, title, className, children}) => {
+export const SubMenu: FC<SubMenuProps> = ({ index, title, className, children}) => {
 
   const context = useContext(MenuContext)
   // 针对纵向时，下拉菜单默认展开

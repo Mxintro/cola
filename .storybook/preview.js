@@ -12,7 +12,7 @@ export const parameters = {
   // 组件展示排序
   options: {
     storySort: {
-      order: ['Button', 'Input','Checkbox', 'AutoComplete','Select','Checkbox', 'From', 'Menu', 'Icon'],
+      order: ['Button', 'Input','Checkbox', 'AutoComplete','Select','Checkbox', 'Form', 'Menu', 'Icon'],
     },
   }
 }

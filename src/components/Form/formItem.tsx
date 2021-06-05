@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState, useEffect, useRef, FunctionComponentElement, ReactElement } from 'react'
 
 import { FormStoreContext } from './form'
 import { RuleItem } from 'async-validator';
@@ -95,9 +95,10 @@ export const FormItem: React.FC<FormItemProps> = ({
   }
 
 // 多层查找Input
- function handleChildren(child: any) {
-   if (!child) return
-   if (child?.type.name !== 'Button'){
+ function handleChildren(children: unknown) {
+   if (!children) return
+   const child =  children as FunctionComponentElement<ItemChild>
+   if (child.type.name && child.type.name !== 'Button'){
      if (child.type.name === 'Checkbox') {
       return React.cloneElement(child, {onChange, defaultChecked: value})
      }

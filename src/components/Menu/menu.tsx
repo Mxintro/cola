@@ -6,11 +6,21 @@ import { SubMenuProps } from './subMenu'
 type MenuMode = 'horizontal' | 'vertical'
 
 export interface MenuProps {
-  defaultIndex?: string;
+  /**
+   * 展示模式，纵向模式和水平模式
+   */
   mode?: MenuMode;
+  /**
+   * 默认active的MenuItem
+   */
+  defaultIndex?: string;
+  /**
+   * 自定义样式
+   */
   className?: string;
-  style?: React.CSSProperties;
-  // 点击MenuItem时回调
+  /**
+   * 点击MenuItem时回调
+   */ 
   onSelect?: (index: string) => void;
   // 展开子菜单，只对纵向模式生效
   defaultOpenSubMenus?: string[]
@@ -26,7 +36,7 @@ export interface IMenuContext {
 export const MenuContext = createContext<IMenuContext>({index: '0'})
 
 export const Menu: FC<MenuProps> = (props) => {
-  const { defaultIndex, mode, children, className, style, onSelect, defaultOpenSubMenus } = props
+  const { defaultIndex, mode, children, className, onSelect, defaultOpenSubMenus, ...resProps } = props
   const [ currentActive, setActive ] = useState(defaultIndex)
 
   const classes = classNames('cola-menu', className, {
@@ -63,7 +73,7 @@ export const Menu: FC<MenuProps> = (props) => {
     })
   }
   return(
-    <ul className={classes} style={style} data-testid="test-menu">
+    <ul className={classes}  data-testid="test-menu" {...resProps}>
       <MenuContext.Provider value={passedContext}>
         {renderChildren()}
       </MenuContext.Provider>
