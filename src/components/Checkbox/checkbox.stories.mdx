@@ -32,14 +32,14 @@ import Checkbox from './Select'
       { label: 'Pear', value: 'Pear' },
       { label: 'Orange', value: 'Orange' },
     ]}
-    defaultValue={['Apple']}
+    defaultChecked={['Apple']}
     onChange={(res) => console.log(res)}
   />
 </div>
 ```
 
 #### CheckboxGruop
-##### 从数组生成Checkbox组，defaultValue默认选中的选项
+##### 从数组生成Checkbox组，defaultValue默认选中的选项。
 
 <Canvas>
   <Story name='CheckboxGruop' args={{
@@ -48,7 +48,7 @@ import Checkbox from './Select'
       { label: 'Pear', value: 'Pear' },
       { label: 'Orange', value: 'Orange' },
     ],
-    defaultValue: ['Apple'],
+    defaultChecked: ['Apple'],
     onChange: (res) => console.log(res)
   }}>
     {args => <Checkbox.Group {...args} />}
@@ -56,7 +56,11 @@ import Checkbox from './Select'
 </Canvas>
 
 ## API
+#### Checkbox
 <Props of={Checkbox} />
+
+#### Checkbox.Group
+<Props of={Checkbox.Group} />
 
 
 

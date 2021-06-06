@@ -60,7 +60,6 @@ export const AutoComplete: React.FC<AutoCompleteProps> = ({
 
   const childLength = React.Children.count(children)
   useEffect(() => {
-    console.log('effecteffecteffect')
     if (renderMode.current || typeof options === 'undefined') {
       setShowDropdown(childLength>0)
     } else {
@@ -71,7 +70,6 @@ export const AutoComplete: React.FC<AutoCompleteProps> = ({
 
   // 点击也可以实现收放
   const handleOnClick = () => {
-    console.log(renderOptions)
     if (renderOptions.length > 0) {
       setShowDropdown(!showDropdown)
     } 
@@ -138,7 +136,6 @@ export const AutoComplete: React.FC<AutoCompleteProps> = ({
 
   // 分options传入和 自定义Option组件传入两种情况
   const renderTemplate = () => {
-    console.log('renderrenderrenderrenderrenderrender')
     if (renderMode.current) {
       return React.Children.map(children, (child, index) => {
         const cnames = classNames('suggestion-item', {

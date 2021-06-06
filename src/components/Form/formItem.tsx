@@ -62,7 +62,6 @@ export const FormItem: React.FC<FormItemProps> = ({
 
   type onChangeType = React.ChangeEventHandler<HTMLInputElement> | ((value: any) => void)
   const onChange:onChangeType = (e: any) => {
-    console.log('change')
 
     if (e.target) {
       if (e.target.type === 'checkbox') {

@@ -7,11 +7,18 @@ import Icon from '.'
 
 # Icon组件
 
-<br/>
+<br/> 
 
-<Icon btnType='primary'>Icon</Icon>
+#### 基于fortawesome简单封装的Icon库
 
-#####
+<Canvas key={1}>
+  <Story name="default" args={{ 
+    icon: 'male'
+  }}>
+    {args => <Icon {...args} />}
+  </Story>
+</Canvas>
+
 ##### 安装：
 ```sh
   npm install cola-comp --save
@@ -22,19 +29,21 @@ import Icon from './Icon'
 <Icon icon='chevron-down'></Icon>
 ```
 
-##### 各种类型按钮
-<Canvas key={1}>
-  <Story name="default" args={{ 
-    icon: 'male'
-  }}>
-    {args => <Icon {...args} />}
-  </Story>
-</Canvas>
-
-##### 不同尺寸Icon
+##### 各种类型Icon
 
 <Canvas>
-    <Icon icon='check'/>
+  <Icon icon='check'/>
+  <Icon icon='check' size='lg'></Icon>
+  <Icon icon='check' size='2x'></Icon>
+  <Icon icon='check' theme='primary'/>
+  <Icon icon='check' theme='secondary'/>
+  <Icon icon='check' theme='success'/>
+  <Icon icon='check' theme='warning'/>
+  <Icon icon='check' theme='danger'/>
+  <Icon icon='angle-down'/>
+  <Icon icon='eye'/>
+  <Icon icon='eye-slash'/>
+  <Icon icon='search'/>
 </Canvas>
 
 ## API

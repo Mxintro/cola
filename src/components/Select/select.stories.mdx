@@ -12,18 +12,17 @@ import Select, { Option } from './'
 
 <Select style={{width: 300}} defaultValue='React'>
   <Select.Option value='react'>React</Select.Option>
-  <Select.Option value='react'>Vue</Select.Option>
-  <Select.Option value='react'>Angular</Select.Option>
-  <Select.Option value='react'>TypeScript</Select.Option>
+  <Select.Option value='vue'>Vue</Select.Option>
+  <Select.Option value='angular'>Angular</Select.Option>
+  <Select.Option value='typescript'>TypeScript</Select.Option>
 </Select>
 
-#####
-##### 安装：
+#### 安装：
 
 ```sh
   npm install cola-comp --save
 ```
-##### 基本用法：
+#### 基本用法：
 ```tsx
 import Select from './Select'
 const { Option } = Select
@@ -38,19 +37,26 @@ const { Option } = Select
 </Select>
 ```
 
-##### 各种类型Select
+#### 另一种使用方法，直接传入options数组，不需要配置Option组件
 
 <Canvas>
   <Story name='select' args={{
+    options:[{value:'java'},{value:'go'},{value:'c++'}],
+    style: {width: 300}
   }}>
-    {args => <Select style={{width: 300}} {...args}>
-      <Option value='react'>React</Option>
-    </Select>}
+    {args => <Select {...args} />}
   </Story>
 </Canvas>
 
 ## API
+#### Select
+
 <Props of={Select} />
+
+#### Option
+
+<Props of={Select.Option} />
+
 
 
 

@@ -6,29 +6,41 @@ export interface OptionValueType {
 }
 
 export interface OptionProps {
-  key?: string;
-  // disabled?: boolean;
+  /**
+   * Option选项值
+   */
   value: string;
-  onClick?: (option: OptionValueType) => void;
-  addOption?: (option: OptionValueType) => void;
+  /**
+   * 可扩展class选项
+   */
   className?: string;
+  /**
+   * 可扩展style
+   */
   style?: React.CSSProperties;
+  /**
+   * label值
+   */
   label?: React.ReactNode;
+  /**
+   * Option展示值
+   */
   children?: string
+  /**
+   * 点击回调事件
+   */
+  onClick?: (option: OptionValueType) => void;
 }
 
 export const Option: React.FC<OptionProps> = ({
-  value='',
-  children='',
+  value,
+  children,
   onClick,
-  addOption,
+  label,
   ...res
 }) => {
-  React.useEffect(()=> {
-    addOption && addOption({value, describe: children})
-  },[])
   return (
-    <div onClick={()=> onClick && onClick({value, describe: children})} {...res}>{children || value}</div>
+    <div onClick={()=> onClick && onClick({value, describe: children})} {...res}>{label || children || value}</div>
   )
 }
 

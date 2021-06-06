@@ -9,9 +9,21 @@ interface OptionsItem {
 }
 
 export interface CheckboxGroupProps {
+  /**
+   * 生成Checkbox的数组
+   */
   options?: OptionsItem[],
+  /**
+   * 默认已选择选项
+   */
   defaultChecked?: string[],
+  /**
+   * 勾选和取消时回调事件
+   */
   onChange?: (value: any) => void,
+  /**
+   * 可扩展class
+   */
   className?: string,
 }
 
@@ -23,11 +35,7 @@ export const CheckboxGroup: React.FC<CheckboxGroupProps> = ({
   ...res
 }) => {
 
-  const [checkedValues, setCheckedValues] = useState([...defaultChecked] || [])
-
-  const isDefault = (value: string) => {
-    return defaultChecked?.includes(value)
-  }
+  const [checkedValues, setCheckedValues] = useState<string[]>([...defaultChecked])
 
   const handleOnChange = (e:React.ChangeEvent<HTMLInputElement>, value: string) => {
     let res: Array<string> = []
@@ -44,11 +52,11 @@ export const CheckboxGroup: React.FC<CheckboxGroupProps> = ({
   return (
     <div className={className} {...res}>
       {
-        options?.map((item, index)=> (
+        options?.map((item)=> (
           <Checkbox
             key={item.value}
             onChange={(e) => handleOnChange(e, item.value)}
-            defaultChecked={defaultChecked.includes(item.value)}>
+            defaultChecked={checkedValues.includes(item.value)}>
             {item.label}
           </Checkbox>
         ))

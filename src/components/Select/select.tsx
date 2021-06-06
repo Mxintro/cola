@@ -55,8 +55,7 @@ export const Select: React.FC<SelectProps> = ({
   const [highlightIndex, setHighlightIndex] = useState<number>(-1)
   // 默认false传入数据，true为自定义Option渲染
   const renderMode = useRef<boolean>(typeof options === 'undefined')
-  
-  // 解决选中后，持续加载问题
+  // 记录是否是选中状态
   const isSelected = useRef(false)
   // 组件本身
   const thisComp = useRef<HTMLDivElement>(null)
@@ -64,7 +63,6 @@ export const Select: React.FC<SelectProps> = ({
     setShowDropdown(false)
   })
 
-  // 尝试不用state？
   const renderOptions: DataSourceType[] = (renderMode.current || typeof options === 'undefined') ? [] : [...options]
 
   useEffect(() => {
@@ -77,7 +75,6 @@ export const Select: React.FC<SelectProps> = ({
 
   // 点击也可以实现收放
   const handleOnClick = () => {
-    console.log(renderOptions)
     if (renderOptions.length > 0) {
       setShowDropdown(!showDropdown)
     } 
@@ -207,8 +204,8 @@ export const Select: React.FC<SelectProps> = ({
       ref={thisComp}> 
       <Input 
         readOnly={readOnly}
-        icon={icon}
-        className={showDropdown? 'change-color':''}
+        icon={showDropdown ? 'search' : icon}
+        className={showDropdown ? 'change-color':''}
         // 直接改变value不会调用onChange
         onChange={handleChange}
         value={inputValue.value}
