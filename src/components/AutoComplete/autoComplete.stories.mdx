@@ -1,5 +1,5 @@
 import { Meta, Story, Canvas, Props, ArgsTable } from '@storybook/addon-docs/blocks'
-import AutoComplete, { DataSourceType, AutoCompleteProps } from './autoComplete'
+import AutoComplete, { DataSourceType, AutoCompleteProps } from './'
 import Complete from './storyBook'
 import { useState } from 'react';
 
@@ -97,8 +97,14 @@ const Complete:React.FC = () => {
   </Story>
 </Canvas>
 
-##### 不同尺寸button
 
-<Props of={AutoComplete}/>
+## API
+#### AutoComplete
+
+<Props of={AutoComplete} />
+
+#### Option
+
+<Props of={AutoComplete.Option} />
 
 

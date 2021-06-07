@@ -1,6 +1,6 @@
 import { FC } from 'react'
 import AutoComplete, { AutoCompleteProps } from './autoComplete'
-import Option , { OptionProps } from '../Option'
+import Option, { OptionProps } from '../Option'
 export * from '../Option'
 export * from './autoComplete'
 

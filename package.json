@@ -13,6 +13,11 @@
     "UI",
     "React"
   ],
+  "homepage": "https://github.com/Mxintro/cola",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Mxintro/cola"
+  },
   "files": [
     "dist"
   ],

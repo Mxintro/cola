@@ -61,12 +61,12 @@ export const AutoComplete: React.FC<AutoCompleteProps> = ({
   const childLength = React.Children.count(children)
   useEffect(() => {
     if (renderMode.current || typeof options === 'undefined') {
-      setShowDropdown(childLength>0)
+      setShowDropdown(childLength > 0)
     } else {
       setShowDropdown(options.length > 0)
     }
     isSelected.current=false
-  },[options, children]) 
+  },[options, childLength]) 
 
   // 点击也可以实现收放
   const handleOnClick = () => {
@@ -142,6 +142,10 @@ export const AutoComplete: React.FC<AutoCompleteProps> = ({
           'is-active': index === highlightIndex
         })
         const childEl = child as React.FunctionComponentElement<OptionProps>
+        if (!childEl?.type) {
+          return 
+        }
+
         if (childEl.type.displayName === 'Option') {
           // 解决渲染问题
           renderOptions.push({value: childEl.props.value})

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef, FunctionComponentElement, ReactElement } from 'react'
+import React, { useState, useEffect, useRef, FunctionComponentElement } from 'react'
 
 import { FormStoreContext } from './form'
 import { RuleItem } from 'async-validator';
@@ -24,7 +24,7 @@ export interface FormItemProps {
    */
   rules?: RuleItem | RuleItem[],
 }
- type ItemChild = InputProps | AutoCompleteProps | SelectProps
+ type ItemChild = InputProps | AutoCompleteProps | SelectProps | ButtonProps
 
 export const FormItem: React.FC<FormItemProps> = ({
   name, 
@@ -48,7 +48,7 @@ export const FormItem: React.FC<FormItemProps> = ({
       store.addRules(name, rules)
       isFirstRender.current = false
     } else {
-      store.set(name, value, !!rules)
+      store.set(name, debounceValue, !!rules)
     }
     
     return store.subscribe((n:string)=>{
@@ -58,7 +58,7 @@ export const FormItem: React.FC<FormItemProps> = ({
         setValue(store.get(name))
       }
     })
-  },[debounceValue])
+  },[debounceValue, store, name, rules])
 
   type onChangeType = React.ChangeEventHandler<HTMLInputElement> | ((value: any) => void)
   const onChange:onChangeType = (e: any) => {

@@ -71,7 +71,7 @@ export const Select: React.FC<SelectProps> = ({
       setValue({value: defaultValue})
       setHighlightIndex(index)
     }
-  },[]) 
+  },[defaultValue, renderOptions]) 
 
   // 点击也可以实现收放
   const handleOnClick = () => {
@@ -127,7 +127,7 @@ export const Select: React.FC<SelectProps> = ({
         break
       case 'Enter':
         // 针对第一次和选择后的特殊情况的收放
-        if (renderOptions.length > 0 && isSelected.current || highlightIndex===-1) {
+        if ((renderOptions.length > 0 && isSelected.current) || highlightIndex===-1) {
           setShowDropdown(!showDropdown)
           isSelected.current =false
         } else {
@@ -210,7 +210,8 @@ export const Select: React.FC<SelectProps> = ({
         onChange={handleChange}
         value={inputValue.value}
         onKeyDown={handleKeyDown}
-        {...restProps}></Input>
+        {...restProps}>
+      </Input>
       {generateDropdown()}
     </div>
   )
