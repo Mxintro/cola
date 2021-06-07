@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import AutoComplete, { DataSourceType, AutoCompleteProps } from './autoComplete'
+import AutoComplete, { DataSourceType } from './autoComplete'
 
 const helloTo = (str: string, repeat: number = 1):DataSourceType => ({
   value: 'hello ' + str.repeat(repeat),

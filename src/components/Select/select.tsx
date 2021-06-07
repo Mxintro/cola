@@ -71,7 +71,7 @@ export const Select: React.FC<SelectProps> = ({
       setValue({value: defaultValue})
       setHighlightIndex(index)
     }
-  },[defaultValue, renderOptions]) 
+  },[defaultValue]) 
 
   // 点击也可以实现收放
   const handleOnClick = () => {
