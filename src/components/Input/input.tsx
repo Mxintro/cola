@@ -36,13 +36,13 @@ export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElem
    */
   append?: string | React.ReactElement,
   /**
-   * 
-   */
-  onChange?: React.ChangeEventHandler<HTMLInputElement>,
-  /**
    * 验证未通过
    */
   hasError?: boolean,
+  /**
+   * 输入值改变时回调事件
+   */
+   onChange?: React.ChangeEventHandler<HTMLInputElement>,
 }
 
 export const Input: React.FC<InputProps> = (props) => {

@@ -1,15 +1,14 @@
 import { Meta, Story, Canvas, Props, ArgsTable } from '@storybook/addon-docs/blocks'
 import AutoComplete, { DataSourceType, AutoCompleteProps } from './'
 import Complete from './storyBook'
-import { useState } from 'react';
+import { useState } from 'react'
 
 
-<Meta title="AutoComplete" 
+<Meta title="AutoComplete 自动完成" 
   component={AutoComplete}
   />
 
-# AutoComplete组件
-##### 输入框自动完成功能
+# AutoComplete 自动完成
 
 <br/>
 
@@ -17,23 +16,23 @@ import { useState } from 'react';
 
 <br/>
 
-#### 安装：
+#### 引入：
 
-```sh
-  npm install cola-comp --save
+```tsx
+  import { AutoComplete } from 'cola-react-ui'
 ```
 #### 基本用法：
 ##### onSearch得到搜索值，通过options设置数据源
 ```tsx
 import React, { useState } from 'react'
-import AutoComplete, { DataSourceType, AutoCompleteProps } from './autoComplete'
+import { AutoComplete } from 'cola-react-ui'
 
-const helloTo = (str: string, repeat: number = 1):DataSourceType => ({
-  value: 'hello ' + str.repeat(repeat), 
-})
+const Complete: React.FC = () => {
+  const [options, setOptions] = useState<{value:string}[]>([])
 
-const Complete:React.FC = () => {
-  const [options, setOptions] = useState<DataSourceType[]>([])
+  const helloTo = (str: string, repeat: number = 1) => ({
+    value: 'hello ' + str.repeat(repeat),
+  })
 
   const onSearch = (searchText:string) => {
     setOptions(
@@ -57,7 +56,6 @@ const Complete:React.FC = () => {
     </>
   )
 }
-
 ```
 
 #### 自定义选项

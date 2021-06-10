@@ -11,7 +11,13 @@ const { useState, useEffect, useRef, useCallback } = React
 // 用户可定义数据源类型
 export type DataSourceType<T = {}> = T & OptionValueType
 
-export interface AutoCompleteProps extends Omit<InputProps, 'onSelect'> {
+type omitProps = 'onSelect' | 'onChange'
+
+export interface AutoCompleteProps extends Omit<InputProps, omitProps> {
+  /**
+   * 数据化配置选项内容
+   */
+   options?: Array<DataSourceType> 
   /**
    * 搜索补全项的时候调用
    */
@@ -20,20 +26,21 @@ export interface AutoCompleteProps extends Omit<InputProps, 'onSelect'> {
    * 被选中时调用，参数为选中项的value值
    */
   onSelect?: (value: string) => void,
-  /**
-   * 数据化配置选项内容
+   /**
+   * 值改变时调用
    */
-   options?: Array<DataSourceType> 
+  onChange?: (value: string) => void,
 }
 
 // showDropdown会直接使children不渲染
 // 渲染问题：renderOption自定义渲染，用state不好处理叠加问题，不用state渲染不对
 // options由外部传入，减少组件复杂度，获取数据更灵活
 export const AutoComplete: React.FC<AutoCompleteProps> = ({
-  value,
+  value='',
   options,
   onSearch,
   onSelect,
+  onChange,
   style,
   children,
   ...restProps
@@ -56,9 +63,20 @@ export const AutoComplete: React.FC<AutoCompleteProps> = ({
   })
 
   // 尝试不用state？
-  const renderOptions: DataSourceType[] = (renderMode.current || typeof options === 'undefined') ? [] : [...options]
+  let renderOptions: DataSourceType[] = (renderMode.current || typeof options === 'undefined') ? [] : [...options]
 
   const childLength = React.Children.count(children)
+
+  const changeByValue = useCallback(
+    () => {
+      console.log('fdfdfdfdfd')
+      const v = value as string
+      setValue({value: v})
+      onSearch(v)
+    },
+    [value],
+  )
+
   useEffect(() => {
     if (renderMode.current || typeof options === 'undefined') {
       setShowDropdown(childLength > 0)
@@ -66,7 +84,8 @@ export const AutoComplete: React.FC<AutoCompleteProps> = ({
       setShowDropdown(options.length > 0)
     }
     isSelected.current=false
-  },[options, childLength]) 
+    // changeByValue()
+  },[options, childLength, value]) 
 
   // 点击也可以实现收放
   const handleOnClick = () => {
@@ -79,12 +98,14 @@ export const AutoComplete: React.FC<AutoCompleteProps> = ({
   const debounceSearch = useCallback(
     debounce((value: string)=>{
       onSearch(value)
+      onChange && onChange(value)
     }, 200),
     [],
   )
 
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = e => {
       const value = e.target.value.trim()
+      console.log(value)
       setValue({value})
       if (value) {
         debounceSearch(value)
@@ -95,10 +116,12 @@ export const AutoComplete: React.FC<AutoCompleteProps> = ({
     }
 
   const handleOnSelect = (sel: DataSourceType) => {
+    console.log(sel)
     isSelected.current = true
     setShowDropdown(false)
     setValue(sel)
     onSelect && onSelect (sel.value)
+    onChange && onChange(sel.value)
   }
 
   // 处理键盘事件
@@ -120,8 +143,10 @@ export const AutoComplete: React.FC<AutoCompleteProps> = ({
         highLight(highlightIndex-1)
         break
       case 'Enter':
-        if (renderOptions.length>0) {
+        e.preventDefault()
+        if (renderOptions.length > 0 && isSelected.current) {
           setShowDropdown(!showDropdown)
+          isSelected.current =false
         } else {
           renderOptions[highlightIndex] && handleOnSelect(renderOptions[highlightIndex])
         }

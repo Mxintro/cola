@@ -1,5 +1,5 @@
 import React from 'react'
-import FormStore from './formStore'
+import FormStore, {FormItemType} from './formStore'
 
 export interface FormProps {
   /**
@@ -9,11 +9,11 @@ export interface FormProps {
   /**
    * 提交表单且数据验证成功后回调事件
    */
-  onFinish?: (value: any | undefined) => void,
+  onFinish?: (value:FormItemType) => void,
   /**
    * 提交表单且数据验证失败后回调事件
    */
-  onFinishFailed?: (value: any | undefined) => void,
+  onFinishFailed?: (value: FormItemType) => void,
   /**
    * 设置表单样式
    */

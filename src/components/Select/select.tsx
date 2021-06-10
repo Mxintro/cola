@@ -12,6 +12,7 @@ const { useState, useEffect, useRef, useCallback } = React
 export type DataSourceType<T = {}> = T & OptionValueType
 
 type omitProps = 'onSelect' | 'onChange'
+
 export interface SelectProps extends Omit<InputProps, omitProps> {
   /**
    * 被选中时调用，参数为选中项的value值
@@ -30,10 +31,6 @@ export interface SelectProps extends Omit<InputProps, omitProps> {
     */
    defaultValue?: string,
 }
-
-// showDropdown会直接使children不渲染
-// 渲染问题：renderOption自定义渲染，用state不好处理叠加问题，不用state渲染不对
-// options由外部传入，减少组件复杂度，获取数据更灵活
 export const Select: React.FC<SelectProps> = ({
   value,
   options,
@@ -46,7 +43,6 @@ export const Select: React.FC<SelectProps> = ({
   icon='chevron-down',
   ...restProps
 }) => {
-
 
   const [inputValue, setValue] = useState<DataSourceType>({value: ''})
   
@@ -62,7 +58,7 @@ export const Select: React.FC<SelectProps> = ({
   useClickOutside(thisComp, ()=> {
     setShowDropdown(false)
   })
-
+  
   const renderOptions: DataSourceType[] = (renderMode.current || typeof options === 'undefined') ? [] : [...options]
 
   useEffect(() => {
@@ -71,7 +67,10 @@ export const Select: React.FC<SelectProps> = ({
       setValue({value: defaultValue})
       setHighlightIndex(index)
     }
-  },[defaultValue]) 
+    // 用于form中reset改变value
+    const v = value as string
+    setValue({value: v})
+  },[defaultValue, value]) 
 
   // 点击也可以实现收放
   const handleOnClick = () => {
@@ -126,6 +125,7 @@ export const Select: React.FC<SelectProps> = ({
         highLight(highlightIndex-1)
         break
       case 'Enter':
+        e.preventDefault()
         // 针对第一次和选择后的特殊情况的收放
         if ((renderOptions.length > 0 && isSelected.current) || highlightIndex===-1) {
           setShowDropdown(!showDropdown)
@@ -208,7 +208,7 @@ export const Select: React.FC<SelectProps> = ({
         className={showDropdown ? 'change-color':''}
         // 直接改变value不会调用onChange
         onChange={handleChange}
-        value={inputValue.value}
+        value={inputValue.value || value}
         onKeyDown={handleKeyDown}
         {...restProps}>
       </Input>

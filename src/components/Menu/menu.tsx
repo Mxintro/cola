@@ -19,11 +19,13 @@ export interface MenuProps {
    */
   className?: string;
   /**
+   * 展开子菜单，只对纵向模式生效
+   */
+  defaultOpenSubMenus?: string[]
+  /**
    * 点击MenuItem时回调
    */ 
   onSelect?: (index: string) => void;
-  // 展开子菜单，只对纵向模式生效
-  defaultOpenSubMenus?: string[]
 }
 
 export interface IMenuContext {

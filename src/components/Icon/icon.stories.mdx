@@ -1,11 +1,11 @@
-import { Meta, Story, Canvas, Props } from '@storybook/addon-docs/blocks';
+import { Meta, Story, Canvas, Props } from '@storybook/addon-docs/blocks'
 import Icon from '.'
 
-<Meta title="Icon" 
+<Meta title="Icon 图标" 
   component={Icon}
   />
 
-# Icon组件
+# Icon 图标
 
 <br/> 
 
@@ -19,14 +19,19 @@ import Icon from '.'
   </Story>
 </Canvas>
 
-##### 安装：
-```sh
-  npm install cola-comp --save
+<br/>
+
+#### 引入：
+```tsx
+  import { Icon } from 'cola-react-ui'
 ```
 ##### 基本用法：
 ```js
 import Icon from './Icon'
-<Icon icon='chevron-down'></Icon>
+
+const MyIcon: React.FC = () => (
+  <Icon icon='chevron-down'></Icon>
+)
 ```
 
 ##### 各种类型Icon

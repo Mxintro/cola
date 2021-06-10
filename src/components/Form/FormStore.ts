@@ -1,18 +1,25 @@
 import { deepCopy, deepGet, deepSet } from '../../utils/utils'
 import Schema, { Rules, RuleItem } from 'async-validator';
-
+ 
 export type FormListener = (name: string) => void
 
-export default class FormStore <T extends Object = any>{
-  private initialValues: T
+export type FormItemType = { [key: string]: any }
+
+export default class FormStore {
+  
+  private initialValues: FormItemType = {}
+
   private listeners: FormListener[] = []
-  private values: T
+
+  private values: FormItemType = {}
   // 一个map结构
   private rulesList: Rules = {}
-  private errorsList:  { [key: string]: string } = {}
+
+  private errorsList: FormItemType = {}
+
   private isResetting: boolean = false
 
-  constructor(value: T) {
+  constructor(value: FormItemType) {
     this.initialValues = value
     this.values = deepCopy(value)
   }
@@ -21,7 +28,7 @@ export default class FormStore <T extends Object = any>{
     this.listeners.forEach(listener => listener(name))
   }
 
-  get(name?: string) {
+  get(name?: string){
     return name === undefined ? { ...this.values } : deepGet(this.values, name)
   }
 
@@ -43,6 +50,7 @@ export default class FormStore <T extends Object = any>{
   
   reset() {
     this.isResetting = true
+    // 这里需要merge
     this.values = deepCopy(this.initialValues)
     this.errorsList = {}
     this.notify('*')
@@ -85,7 +93,7 @@ export default class FormStore <T extends Object = any>{
         await Promise.all(keys.map(name => this.validate(name)))
         return this.get()
       } catch (error) {
-        return Promise.reject(error )
+        return Promise.reject(error)
       }   
     }
   }

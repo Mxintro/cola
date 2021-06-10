@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef, FunctionComponentElement } from 'react'
-
 import { FormStoreContext } from './form'
 import { RuleItem } from 'async-validator';
 import { InputProps } from '../Input'
 import { ButtonProps } from '../Button'
 import { AutoCompleteProps } from '../AutoComplete'
 import { SelectProps } from '../Select'
+import { CheckboxProps } from '../Checkbox'
 import useDebounce from '../../hooks/useDebounce'
 import classNames from 'classnames'
 
@@ -24,7 +24,7 @@ export interface FormItemProps {
    */
   rules?: RuleItem | RuleItem[],
 }
- type ItemChild = InputProps | AutoCompleteProps | SelectProps | ButtonProps
+ type ItemChild = InputProps | AutoCompleteProps | SelectProps | ButtonProps | CheckboxProps
 
 export const FormItem: React.FC<FormItemProps> = ({
   name, 
@@ -40,7 +40,7 @@ export const FormItem: React.FC<FormItemProps> = ({
   const isFirstRender = useRef(true)
   const debounceValue = useDebounce(value, 200)
 
-
+  console.log(value)
   useEffect(() => {
     if (!store || !name) return
     // 第一次渲染添加rules
@@ -60,9 +60,10 @@ export const FormItem: React.FC<FormItemProps> = ({
     })
   },[debounceValue, store, name, rules])
 
-  type onChangeType = React.ChangeEventHandler<HTMLInputElement> | ((value: any) => void)
-  const onChange:onChangeType = (e: any) => {
-
+  // 传两个不同参数函数
+  type onChangeType = React.ChangeEventHandler<HTMLInputElement> | ((value: string | number) => void)
+  const handleOnChange:onChangeType = (target: unknown) => {
+    const e = target as React.ChangeEvent<HTMLInputElement>
     if (e.target) {
       if (e.target.type === 'checkbox') {
         setValue(e.target.checked)
@@ -72,7 +73,6 @@ export const FormItem: React.FC<FormItemProps> = ({
     } else {
       setValue(e)
     }
-    
   }
 
   // 是否必填
@@ -86,6 +86,8 @@ export const FormItem: React.FC<FormItemProps> = ({
   }
 
   const renderChildren = () => { 
+    console.log('--------')
+
     return React.Children.map(children, child => {
       const childEl = child 
       return handleChildren(childEl)
@@ -94,19 +96,37 @@ export const FormItem: React.FC<FormItemProps> = ({
   }
 
 // 多层查找Input
- function handleChildren(children: unknown) {
-   if (!children) return
-   const child =  children as FunctionComponentElement<ItemChild>
-   if (child.type.name && child.type.name !== 'Button'){
-     if (child.type.name === 'Checkbox') {
-      return React.cloneElement(child, {onChange, defaultChecked: value})
-     }
-     const childProps = { value, onChange, hasError: errorMsg !== ''}
-     return React.cloneElement(child, childProps)
-   } else {
-    return child
-   }
- }
+  function handleChildren(children: unknown): any {
+    if (!children) return
+    const child =  children as FunctionComponentElement<ItemChild>
+    const childName = child.type.name
+    if (childName && childName !== 'Button'){
+      let onChange: unknown
+      let childProps = {}
+      // input 自触发组件
+      switch (childName) {
+        case 'Input': case 'Password':
+          onChange = handleOnChange as React.ChangeEventHandler<HTMLInputElement>
+          childProps = { value, onChange, hasError: errorMsg !== '' }
+          break
+        case 'Select': case 'AutoComplete':
+          console.log(value)
+          onChange = handleOnChange as ((value: string | number) => void)
+          childProps = { value, onChange, hasError: errorMsg !== '' }
+          break
+        case 'Checkbox':
+          onChange = handleOnChange as React.ChangeEventHandler<HTMLInputElement>
+          childProps = { onChange, defaultChecked: value }
+          break
+        default:
+          return handleChildren(child.props?.children)
+      }
+      // 而来自原始元素的 key 和 ref 将被保留。
+      return React.cloneElement(child, childProps)
+    } else {
+      return child
+    }
+  }
 
   const classes = classNames('form-item', className, {
     'is-reqiured': isReqiured(rules),

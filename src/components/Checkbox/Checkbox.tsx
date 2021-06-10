@@ -6,13 +6,13 @@ export interface CheckboxProps extends React.InputHTMLAttributes<HTMLInputElemen
    */
   disabled?: boolean,
   /**
-   * 勾选和取消时回调事件
-   */
-  onChange?: React.ChangeEventHandler<HTMLInputElement>,
-  /**
    * 	默认选中的选项
    */
   defaultChecked?: boolean,
+  /**
+   * 勾选和取消时回调事件
+   */
+  onChange?: React.ChangeEventHandler<HTMLInputElement>,
 }
 
 export const Checkbox: React.FC<CheckboxProps> = ({

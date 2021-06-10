@@ -1,4 +1,4 @@
-import React, { FC, useContext, useState } from 'react'
+import React, { FC, useContext, useState, useRef } from 'react'
 import classNames from 'classnames'
 import { MenuContext } from './menu'
 import { MenuItemProps } from './menuItem'
@@ -19,6 +19,7 @@ export interface SubMenuProps {
 export const SubMenu: FC<SubMenuProps> = ({ index, title, className, children}) => {
 
   const context = useContext(MenuContext)
+  const nodeRef = useRef(null)
   // 针对纵向时，下拉菜单默认展开
   const defaultOpenSubMenus = context.defaultOpenSubMenus as Array<string>
   const isOPen = (index && context.mode==='vertical') ? defaultOpenSubMenus.includes(index) : false
@@ -67,8 +68,9 @@ export const SubMenu: FC<SubMenuProps> = ({ index, title, className, children}) 
         classNames='zoom-in-top'
         unmountOnExit
         appear
+        nodeRef={nodeRef}
         >
-        <ul className={subMenuClasses}>
+        <ul className={subMenuClasses} ref={nodeRef}>
           {childrenComponent}
         </ul>
       </CSSTransition>

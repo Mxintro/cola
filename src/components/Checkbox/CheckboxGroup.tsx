@@ -18,13 +18,13 @@ export interface CheckboxGroupProps {
    */
   defaultChecked?: string[],
   /**
-   * 勾选和取消时回调事件
-   */
-  onChange?: (value: any) => void,
-  /**
    * 可扩展class
    */
   className?: string,
+  /**
+   * 勾选和取消时回调事件
+   */
+  onChange?: (value: string[]) => void,
 }
 
 export const CheckboxGroup: React.FC<CheckboxGroupProps> = ({

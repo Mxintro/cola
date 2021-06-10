@@ -1,25 +1,37 @@
-import { Meta, Story, Canvas, Props } from '@storybook/addon-docs/blocks';
+import { Meta, Story, Canvas, Props } from '@storybook/addon-docs/blocks'
 import Button from '.'
 
-<Meta title="Button" 
+<Meta title="Button 按钮" 
   component={Button}
   />
 
-# Button组件
+# Button 按钮
 
 <br/>
 
 <Button btnType='primary'>button</Button>
 
-#####
-##### 安装：
-```sh
-  npm install cola-comp --save
-```
-##### 基本用法：
+<br/>
+<br/>
+
+#### 引入：
 ```tsx
-import Button from './button'
-<Button btnType='primary'></Button>
+  import { Button } from 'cola-react-ui'
+```
+#### 基本用法：
+```tsx
+import { Button } from 'cola-react-ui'
+
+const MyButton: React.FC = () => {
+  const handleClick = () => {
+    console.log('do something')
+  }
+  return (
+    <Button btnType='primary'onClick={handleClick}> 
+      button
+    </Button>
+  )
+}
 ```
 
 ##### 各种类型按钮
