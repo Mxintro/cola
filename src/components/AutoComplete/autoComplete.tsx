@@ -36,7 +36,6 @@ export interface AutoCompleteProps extends Omit<InputProps, omitProps> {
 // 渲染问题：renderOption自定义渲染，用state不好处理叠加问题，不用state渲染不对
 // options由外部传入，减少组件复杂度，获取数据更灵活
 export const AutoComplete: React.FC<AutoCompleteProps> = ({
-  value='',
   options,
   onSearch,
   onSelect,
@@ -67,16 +66,6 @@ export const AutoComplete: React.FC<AutoCompleteProps> = ({
 
   const childLength = React.Children.count(children)
 
-  const changeByValue = useCallback(
-    () => {
-      console.log('fdfdfdfdfd')
-      const v = value as string
-      setValue({value: v})
-      onSearch(v)
-    },
-    [value],
-  )
-
   useEffect(() => {
     if (renderMode.current || typeof options === 'undefined') {
       setShowDropdown(childLength > 0)
@@ -85,7 +74,7 @@ export const AutoComplete: React.FC<AutoCompleteProps> = ({
     }
     isSelected.current=false
     // changeByValue()
-  },[options, childLength, value]) 
+  },[options, childLength]) 
 
   // 点击也可以实现收放
   const handleOnClick = () => {
@@ -105,7 +94,6 @@ export const AutoComplete: React.FC<AutoCompleteProps> = ({
 
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = e => {
       const value = e.target.value.trim()
-      console.log(value)
       setValue({value})
       if (value) {
         debounceSearch(value)
@@ -116,7 +104,6 @@ export const AutoComplete: React.FC<AutoCompleteProps> = ({
     }
 
   const handleOnSelect = (sel: DataSourceType) => {
-    console.log(sel)
     isSelected.current = true
     setShowDropdown(false)
     setValue(sel)
@@ -197,7 +184,7 @@ export const AutoComplete: React.FC<AutoCompleteProps> = ({
           onMouseEnter={()=>setHighlightIndex(index)}
           onClick={() => handleOnSelect(item)}
           >
-          {item.value}
+            {item.value}
           </li>
       })
     }

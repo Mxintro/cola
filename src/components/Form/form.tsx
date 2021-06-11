@@ -3,9 +3,9 @@ import FormStore, {FormItemType} from './formStore'
 
 export interface FormProps {
   /**
-   * 初始化表单数据
+   * 表单默认值，只有初始化以及重置时生效
    */
-  initialValues?: Object,
+  initialValues?: object,
   /**
    * 提交表单且数据验证成功后回调事件
    */

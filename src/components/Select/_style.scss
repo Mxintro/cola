@@ -27,6 +27,9 @@
     cursor: pointer;
     transition: $menu-transition;
     color: $body-color;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
     &.is-active {
       background: $select-option-color !important;
     }

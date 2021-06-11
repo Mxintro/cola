@@ -1,5 +1,6 @@
 import { deepCopy, deepGet, deepSet } from '../../utils/utils'
 import Schema, { Rules, RuleItem } from 'async-validator';
+import * as React from 'react';
  
 export type FormListener = (name: string) => void
 
@@ -12,12 +13,13 @@ export default class FormStore {
   private listeners: FormListener[] = []
 
   private values: FormItemType = {}
-  // 一个map结构
+
   private rulesList: Rules = {}
 
   private errorsList: FormItemType = {}
 
-  private isResetting: boolean = false
+  // 针对reset后直接验证
+  private waitToReset: number = 0
 
   constructor(value: FormItemType) {
     this.initialValues = value
@@ -33,11 +35,16 @@ export default class FormStore {
   }
 
   set(name: string, value: any, validate: boolean) {
+    if (value === this.values.name) return
     deepSet(this.values, name, value)
-    if (validate && !this.isResetting) {
-      this.validate(name).then().catch(e =>console.log(e))
+    
+    if (this.waitToReset === 0) {
+      if (validate ) {
+        this.validate(name).then().catch(e =>console.log(e))
+      }
+    } else {
+      this.waitToReset--
     }
-    this.isResetting = false
   }
 
   addRules(name: string, rules: RuleItem | RuleItem[]) {
@@ -49,7 +56,7 @@ export default class FormStore {
   }
   
   reset() {
-    this.isResetting = true
+    this.waitToReset = Object.keys(this.values).length
     // 这里需要merge
     this.values = deepCopy(this.initialValues)
     this.errorsList = {}
@@ -95,6 +102,8 @@ export default class FormStore {
       } catch (error) {
         return Promise.reject(error)
       }   
+    } else {
+      return this.get()
     }
   }
 }

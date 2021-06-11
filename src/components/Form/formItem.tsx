@@ -40,7 +40,6 @@ export const FormItem: React.FC<FormItemProps> = ({
   const isFirstRender = useRef(true)
   const debounceValue = useDebounce(value, 200)
 
-  console.log(value)
   useEffect(() => {
     if (!store || !name) return
     // 第一次渲染添加rules
@@ -61,8 +60,7 @@ export const FormItem: React.FC<FormItemProps> = ({
   },[debounceValue, store, name, rules])
 
   // 传两个不同参数函数
-  type onChangeType = React.ChangeEventHandler<HTMLInputElement> | ((value: string | number) => void)
-  const handleOnChange:onChangeType = (target: unknown) => {
+  const handleOnChange = (target: any) => {
     const e = target as React.ChangeEvent<HTMLInputElement>
     if (e.target) {
       if (e.target.type === 'checkbox') {
@@ -86,8 +84,6 @@ export const FormItem: React.FC<FormItemProps> = ({
   }
 
   const renderChildren = () => { 
-    console.log('--------')
-
     return React.Children.map(children, child => {
       const childEl = child 
       return handleChildren(childEl)
@@ -110,7 +106,6 @@ export const FormItem: React.FC<FormItemProps> = ({
           childProps = { value, onChange, hasError: errorMsg !== '' }
           break
         case 'Select': case 'AutoComplete':
-          console.log(value)
           onChange = handleOnChange as ((value: string | number) => void)
           childProps = { value, onChange, hasError: errorMsg !== '' }
           break
