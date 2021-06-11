@@ -9,9 +9,9 @@ const testProps: MenuProps = {
   onSelect: jest.fn(),
   className: 'test'
 }
-const testVerProps: MenuProps = {
-  mode: 'vertical'
-}
+// const testVerProps: MenuProps = {
+//   mode: 'vertical'
+// }
 
 const generateMenu = (props: MenuProps) => {
   return (
@@ -29,7 +29,7 @@ const generateMenu = (props: MenuProps) => {
   )
 }
 
-let wrapper: RenderResult, wrapper2: RenderResult, menuElement: HTMLElement, activeElement: HTMLElement, disabledElement: HTMLElement
+let wrapper: RenderResult, menuElement: HTMLElement, activeElement: HTMLElement, disabledElement: HTMLElement
 describe('test Menu and MenuItem component', () => {
   beforeEach(() => {
     wrapper = render(generateMenu(testProps))

@@ -70,7 +70,7 @@ export const Select: React.FC<SelectProps> = ({
     // 用于form中reset改变value
     const v = value as string
     setValue({value: v})
-  },[defaultValue, value]) 
+  },[defaultValue, value, renderOptions]) 
 
   // 点击也可以实现收放
   const handleOnClick = () => {
