@@ -2,7 +2,7 @@ language: node_js
 node_js:
   - "stable"
 cache:
-  diretories:
+  directories:
   - node_modules
 env:
   - CI=true
@@ -11,7 +11,9 @@ script:
 deploy:
   provider: pages
   skip_cleanup: true
-  github_token: $github_token  # Set in the settings page of your repository, as a secure variable
+  github_token: $github_token
   local_dir: storybook-static
   on:
     branch: travis
+  
+  
