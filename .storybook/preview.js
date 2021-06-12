@@ -9,6 +9,7 @@ export const parameters = {
       date: /Date$/,
     },
   },
+  viewMode: 'docs',
   // 组件展示排序
   options: {
     storySort: {
@@ -24,5 +25,5 @@ export const parameters = {
         'Menu 导航菜单',
         'Icon 图标'],
     },
-  }
+  },
 }

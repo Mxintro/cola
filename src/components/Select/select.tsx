@@ -63,14 +63,14 @@ export const Select: React.FC<SelectProps> = ({
 
   useEffect(() => {
     const index = renderOptions.findIndex(item => item.value===defaultValue)
-    if ( index > -1){
-      setValue({value: defaultValue})
+    if ( index > -1 ){
+      setValue(renderOptions[index])
       setHighlightIndex(index)
     }
     // 用于form中reset改变value
     const v = value as string
     setValue({value: v})
-  },[defaultValue, value, renderOptions]) 
+  },[children, options, value]) 
 
   // 点击也可以实现收放
   const handleOnClick = () => {
@@ -152,7 +152,8 @@ export const Select: React.FC<SelectProps> = ({
         const childEl = child as React.FunctionComponentElement<OptionProps>
         if (childEl.type.displayName === 'Option') {
           // 解决渲染问题
-          renderOptions.push({value: childEl.props.value})
+          const describe = childEl.props.label || childEl.props.children
+          renderOptions.push({value: childEl.props.value, describe: describe})
           return (
             <li
             key={index}
@@ -208,7 +209,7 @@ export const Select: React.FC<SelectProps> = ({
         className={showDropdown ? 'change-color':''}
         // 直接改变value不会调用onChange
         onChange={handleChange}
-        value={inputValue.value || value}
+        value={inputValue.describe || inputValue.value}
         onKeyDown={handleKeyDown}
         {...restProps}>
       </Input>

@@ -65,7 +65,6 @@ export const AutoComplete: React.FC<AutoCompleteProps> = ({
   let renderOptions: DataSourceType[] = (renderMode.current || typeof options === 'undefined') ? [] : [...options]
 
   const childLength = React.Children.count(children)
-
   useEffect(() => {
     if (renderMode.current || typeof options === 'undefined') {
       setShowDropdown(childLength > 0)

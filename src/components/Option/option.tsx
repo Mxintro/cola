@@ -21,7 +21,7 @@ export interface OptionProps {
   /**
    * label值
    */
-  label?: React.ReactNode;
+  label?: string;
   /**
    * Option展示值
    */
