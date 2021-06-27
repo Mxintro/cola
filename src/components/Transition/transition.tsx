@@ -22,13 +22,11 @@ const Transition: React.FC<TransitionProps> = (props) => {
   // fix: findDOMnode warning
   const nodeRef = React.useRef(null)
   return (
-    <CSSTransition nodeRef={nodeRef}
+    <CSSTransition 
       classNames = { classNames ? classNames : animation}
       {...restProps}
     >
-      <div ref={nodeRef}>
-        {children}
-      </div>
+      {children}
     </CSSTransition>
   )
 }

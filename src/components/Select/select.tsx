@@ -5,6 +5,7 @@ import classNames from 'classnames'
 import useClickOutside from '../../hooks/useClickOutside'
 import { debounce } from '../../utils/utils'
 import { OptionProps, OptionValueType } from '../Option'
+import { CSSTransition } from 'react-transition-group'
 
 const { useState, useEffect, useRef, useCallback } = React
 
@@ -61,22 +62,27 @@ export const Select: React.FC<SelectProps> = ({
   
   const renderOptions: DataSourceType[] = (renderMode.current || typeof options === 'undefined') ? [] : [...options]
 
+  // 用于form中reset改变value
   useEffect(() => {
+    const v = value as string
+    setValue({value: v})
+  },[value])
+
+  useEffect (() => {
     const index = renderOptions.findIndex(item => item.value===defaultValue)
     if ( index > -1 ){
       setValue(renderOptions[index])
       setHighlightIndex(index)
     }
-    // 用于form中reset改变value
-    const v = value as string
-    setValue({value: v})
-  },[children, options, value]) 
+  }, [])
 
   // 点击也可以实现收放
   const handleOnClick = () => {
-    if (renderOptions.length > 0) {
-      setShowDropdown(!showDropdown)
-    } 
+    setShowDropdown(!showDropdown)
+
+    // if (renderOptions.length > 0) {
+    //   setShowDropdown(!showDropdown)
+    // } 
   }
 
   // 防抖利用useCallback 或者 useRef 返回唯一回调
@@ -191,12 +197,12 @@ export const Select: React.FC<SelectProps> = ({
         animation='zoom-in-top'
       >
         <ul className="cola-select-list">
-          { renderTemplate()}
+          { renderTemplate() }
         </ul>
       </Transition>
     )
   }
- 
+  
   return (
     <div 
       style={style}
