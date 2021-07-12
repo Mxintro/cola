@@ -64,8 +64,9 @@ export const Slider: React.FC<SliderProps> = ({
   return (
     <>
       <div className="cola-slider-wrapper">
-        <div className="cola-slider-track" ref={hotAreaRef} />
-        <div className="cola-slider-has" style={{ width: `${ratio * 100}%` }}>
+        {/* <div className="cola-slider-rail"/> */}
+        <div className="cola-slider-rail" ref={hotAreaRef} />
+        <div className="cola-slider-track" style={{ width: `${ratio * 100}%` }}>
           <div
             className="cola-slider-ctrl"
             ref={thumbRef}
