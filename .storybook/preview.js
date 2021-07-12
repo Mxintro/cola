@@ -23,6 +23,7 @@ export const parameters = {
         'Checkbox 多选框',
         'Form 表单',
         'Menu 导航菜单',
+        'Slider',
         'Icon 图标'],
     },
   },

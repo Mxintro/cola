@@ -20,7 +20,6 @@ const Transition: React.FC<TransitionProps> = (props) => {
   } = props
   
   // fix: findDOMnode warning
-  const nodeRef = React.useRef(null)
   return (
     <CSSTransition 
       classNames = { classNames ? classNames : animation}

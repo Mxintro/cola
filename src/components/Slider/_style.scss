@@ -1,0 +1,40 @@
+.cola-slider-wrapper {
+  position: relative;
+  height: 12px;
+  margin: 10px 6px;
+  padding: 4px 0;
+  cursor: pointer;
+  list-style: none;
+  .cola-slider-track {
+    position: absolute;
+    top: 0;
+    right: 0;
+    left: 0;
+    height: 20px;
+    z-index: 1;
+  }
+  .cola-slider-has {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 20px;
+    border-radius: 10px;
+    background: #999;
+    .cola-slider-ctrl {
+      position: absolute;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      z-index: 2;
+      right: -30px;
+      top: -20px;
+      background: #999;
+      box-shadow: rgba(0, 0, 0, 0.3) 0 5px 10px 0;
+    }
+  }
+}
+
+
+
+
+
