@@ -1,55 +1,48 @@
 import React from 'react'
+import { sliderReducer, StateType } from './reducer'
 
-const { useState, useRef, useCallback, useEffect } = React
-type MouseEventHandler = React.MouseEventHandler<HTMLDivElement>
+const { useState, useRef, useCallback, useEffect, useReducer } = React
 
 interface SliderProps {
   initRatio: number
 }
 
-const fixRatio = (ratio: number) => Math.max(0, Math.min(1, ratio))
-
 export const Slider: React.FC<SliderProps> = ({
   initRatio=0
 }) => {
-  const [ratio, setRatio] = useState<number>(initRatio)
+  const initState: StateType = {
+    ratio: initRatio,
+    lastPos: 0,
+    slideRange: 0,
+    sliding: false
+  }
 
-  const [lastPos, setLastPos] = useState<number>(0)
-
-  const [slideRange, setSlideRange] = useState<number>(0)
-
-  const [sliding, setSliding] = useState<boolean>(false)
+  const [state, dispatch] = useReducer(sliderReducer, initState)
 
   const hotAreaRef =  useRef<HTMLDivElement>(null)
   const thumbRef =  useRef<HTMLDivElement>(null)
 
-
-  const handleThumbMouseDown:MouseEventHandler = useCallback(e => {
-    const hotArea = hotAreaRef.current
-    setLastPos(e.pageX)
-    setSlideRange(hotArea!.clientWidth)
-    setSliding(true)
+  const handleThumbMouseDown: React.MouseEventHandler<HTMLDivElement> = useCallback(e => {
+    console.log(e.pageX)
+    dispatch({type: 'start', payload: {
+      lastPos: e.pageX,
+      slideRange: hotAreaRef.current!.clientWidth,
+      sliding: true
+    }})
+    console.log(state)
   }, [])
 
   useEffect(() => {
     const onSliding = (e: MouseEvent) => {
-      if (!sliding) {
-        return
-      }
-      const pos = e.pageX
-      const delta = pos - lastPos
-      setRatio(r => fixRatio(r + delta / slideRange))
-      setLastPos(pos)
+      dispatch({type: 'sliding', payload: {
+        lastPos: e.pageX,
+      }})
     }
     const onSlideEnd = (e: MouseEvent) => {
-      if (!sliding) {
-        return
-      }
-      const pos = e.pageX
-      const delta = pos - lastPos
-      setRatio(r => fixRatio(r + delta / slideRange))
-      setLastPos(pos)
-      setSliding(false)
+      dispatch({type: 'end', payload: {
+        sliding: false,
+        lastPos: e.pageX
+      }})
     }
     console.log("effect")
     document.addEventListener("mousemove", onSliding)
@@ -59,14 +52,13 @@ export const Slider: React.FC<SliderProps> = ({
       document.removeEventListener("mousemove", onSliding)
       document.removeEventListener("mouseup", onSlideEnd)
     }
-  }, [lastPos, slideRange, sliding])
+  }, [])
 
   return (
     <>
       <div className="cola-slider-wrapper">
-        {/* <div className="cola-slider-rail"/> */}
         <div className="cola-slider-rail" ref={hotAreaRef} />
-        <div className="cola-slider-track" style={{ width: `${ratio * 100}%` }}>
+        <div className="cola-slider-track" style={{ width: `${state.ratio * 100}%` }}>
           <div
             className="cola-slider-ctrl"
             ref={thumbRef}
