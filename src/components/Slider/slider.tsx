@@ -1,6 +1,6 @@
-import { type } from "os";
 import React from "react";
 import { sliderReducer, StateType } from "./reducer";
+import { offset } from '../../utils/utils'
 
 const { useState, useRef, useCallback, useEffect, useReducer } = React;
 
@@ -35,18 +35,22 @@ interface SliderProps {
   style?: React.CSSProperties
 }
 
+const fixRatio = (step: number, value: number, range: number) => {
+  const x = Math.round(value / step)
+  return x * step / range
+}
 
 export const Slider: React.FC<SliderProps> = ({
   defaultValue = 0,
   min = 0,
   max = 100,
-  step = 5,
+  step = 1,
   onChange,
   onAfterChange,
   ...res
 }) => {
   const initState: StateType = {
-    ratio: defaultValue / (max - min),
+    ratio: fixRatio(step, defaultValue, (max - min)),
     lastPos: 0,
     slideRange: 0,
     sliding: false,
@@ -62,23 +66,14 @@ export const Slider: React.FC<SliderProps> = ({
   const hotAreaRef = useRef<HTMLDivElement>(null);
   const thumbRef = useRef<HTMLDivElement>(null);
 
-  console.log(hotAreaRef.current?.scrollLeft)
-
-  const handleThumbMouseDown: React.MouseEventHandler<HTMLDivElement> =
-    useCallback((e) => {
-      e.stopPropagation()
-      dispatch({
-        type: "start",
-        payload: {
-          lastPos: e.pageX,
-          slideRange: hotAreaRef.current!.clientWidth,
-          sliding: true,
-        }
-      });
-    }, []);
-
   useEffect(() => {
-
+    dispatch({
+      type: 'setRail',
+      payload: {
+        slideRange: hotAreaRef.current!.clientWidth,
+        start: offset(hotAreaRef.current).X
+      }
+    })
     const onSliding = (e: MouseEvent) => {
       dispatch({
         type: "sliding",
@@ -108,15 +103,27 @@ export const Slider: React.FC<SliderProps> = ({
     };
   }, []);
 
+  const handleThumbMouseDown: React.MouseEventHandler<HTMLDivElement> =
+    useCallback((e) => {
+      e.stopPropagation()
+      dispatch({
+        type: "start",
+        payload: {
+          lastPos: e.pageX,
+          sliding: true,
+        }
+      });
+    }, []);
+
   const handleRailClick: React.MouseEventHandler<HTMLDivElement> = (e) => {
     dispatch({
-      type: 'jumpto',
+      type: 'jumpTo',
       payload: {
         lastPos: e.pageX,
-        slideRange: hotAreaRef.current!.clientWidth,
       },
-      callback: (value) => onAfterChange
+      callback: onAfterChange
     })
+    setOpen(true)
   }
 
   return (

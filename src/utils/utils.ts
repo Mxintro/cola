@@ -87,3 +87,26 @@ export function debounce<T extends any[]>(
       }, delay)
     }
 }
+
+// 获取元素距离文档顶部和左边的距离
+type Position = {
+  X: number,
+  Y: number
+}
+export function offset(el: HTMLDivElement| null): Position {
+  const pos = {X: 0, Y:0}
+  if (!el) return pos
+  let parent = el.offsetParent
+
+  pos.X = el.offsetLeft
+  pos.Y = el.offsetTop
+
+  while (parent && !(/html|body/i.test(parent.tagName))) {
+    const cur = parent as HTMLElement
+    pos.X += cur.offsetLeft
+    pos.Y += cur.offsetTop
+
+    parent = cur.offsetParent
+  }
+  return pos
+}

@@ -1,6 +1,17 @@
+// *根据步长比例指定滑动位置， 会导致误差积累
+// 
+const fixRatio = (ratio: number, valueRange: number, step: number): number => {
+  const x = 1/valueRange*step
+  const r = Math.round(Math.max(0, Math.min(1, ratio))/x)
+  return x * r
+}
 
-const fixRatio = (ratio: number): number => {
-  return Math.max(0, Math.min(1, ratio))
+// 所以确定起点，确定区间
+const fixPos = (pos: number, step: number, start: number, range: number): {lastPos: number, stepCount: number} => {
+  if (pos <= start) return { lastPos: start, stepCount: 0}
+  if (pos >= (start+range)) return { lastPos: (start+range), stepCount:range/step}
+  const x = Math.round((pos-start)/step)
+  return { lastPos: x * step + start, stepCount: x}
 }
 
 export type StateType = {
@@ -13,14 +24,20 @@ export type StateType = {
   start?: number,
 }
 
+type SetRail = {
+  type: 'setRail',
+  payload:  {
+    slideRange: number,
+    start: number,
+  }
+}
+
 type Start = {
   type: 'start',
   payload:  {
     lastPos: number,
-    slideRange: number,
-    sliding: boolean
-  },
-  callback?: (value: number) => void
+    sliding: boolean,
+  }
 }
 
 type End = {
@@ -41,75 +58,115 @@ type Sliding = {
 }
 
 type JumpTo = {
-  type: 'jumpto',
+  type: 'jumpTo',
   payload: {
     lastPos: number,
-    slideRange: number,
   },
   callback?: (value: number) => void
 }
 
-export type ActionType = Start | End | Sliding | JumpTo
+export type ActionType = Start | End | Sliding | JumpTo | SetRail
+
+// 解决类型保护问题，这里使用自定义的类型保护。还可以改写ActionType，去掉payload可以使代码更简洁
+// The Type Guard Functions
+const isStartAction = (action: ActionType): action is Start => {
+  return action.type === 'start'
+}
+
+const isSetRailAction = (action: ActionType): action is SetRail => {
+  return action.type === 'setRail'
+}
+
+const isEndAction = (action: ActionType): action is End => {
+  return action.type === 'end'
+}
+
+const isSlidingAction = (action: ActionType): action is Sliding => {
+  return action.type === 'sliding'
+}
+
+const isJumpToAction = (action: ActionType): action is JumpTo => {
+  return action.type === 'jumpTo'
+}
 
 // ?按步长跳问题
 // 1.获取初始位置 2.根据步长设置特定位置
 export const sliderReducer = (state: StateType, action: ActionType): StateType => {
-  const { type, payload, callback } = action
-  let ratio: number = 0
-  switch (type) {
-    case 'start':
-      callback && callback(state.ratio)
-      return {
-        ...state,
-        ...payload
-      }
-    case 'sliding':
-      if (!state.sliding) return state
+  const { step, valueRange, start, slideRange } = state
+  const slideStep = step/valueRange*slideRange
 
-      ratio = fixRatio(state?.ratio + (payload?.lastPos - state.lastPos) / state.slideRange)
-      // 小于步长则不动
-      if (Math.abs(ratio-state.ratio)*state.valueRange < state.step) return state
-      // lastPos超出范围情况
-      if (ratio<=0 || ratio >= 1){
-        payload.lastPos = state.lastPos
-      }
-      callback && callback(Math.round(ratio*state.valueRange))
-      return {
-        ...state,
-        ...payload,
-        ratio
-      }
-    case 'end':
-      if (!state.sliding) return state
-
-      ratio = fixRatio(state?.ratio + (payload?.lastPos - state.lastPos) / state.slideRange)
-      if (Math.abs(ratio-state.ratio)*state.valueRange < state.step) return {
-        ...state,
-        sliding: false
-      }
-      if (ratio<=0 || ratio >= 1){
-        payload.lastPos = state.lastPos
-      }
-      callback && callback(Math.round(ratio*state.valueRange))
-      return {
-        ...state,
-        ...payload,
-        ratio
-      }
-    case 'jumpto':
-      const cur = action as JumpTo
-      ratio = fixRatio(state?.ratio + (payload?.lastPos - state.lastPos) /cur.payload.slideRange)
-      if (Math.abs(ratio-state.ratio)*state.valueRange < state.step) return state
-      if (ratio<=0 || ratio >= 1){
-        payload.lastPos = state.lastPos
-      }
-      callback && callback(Math.round(ratio*state.valueRange))
-      return {
-        ...state,
-        ...payload,
-        ratio
-      }
-    default:
+  if (isSlidingAction(action)) {
+    const { payload, callback} = action 
+    if (!state.sliding) {
       return state
+    }
+
+    const { lastPos, stepCount } = fixPos( payload.lastPos, slideStep, start as number, slideRange)
+    if (lastPos === state.lastPos) return state
+    const ratio = stepCount * step/valueRange
+
+    callback && callback(Math.round(ratio*state.valueRange))
+    return {
+      ...state,
+      ...payload,
+      ratio,
+      lastPos
+    }
   }
+
+  if(isJumpToAction(action)) {
+    const { payload, callback } = action
+
+    const { lastPos, stepCount } = fixPos( payload.lastPos, slideStep, start as number, slideRange)
+    if (lastPos === state.lastPos) return state
+    const ratio = stepCount * step/valueRange
+
+    callback && callback(Math.round(ratio*state.valueRange))
+    return {
+      ...state,
+      ...payload,
+      ratio,
+      lastPos
+    }
+  }
+
+  if(isEndAction(action)) {
+    const { payload, callback } = action
+    if (!state.sliding) {
+      return state
+    }
+    callback && callback(Math.round(state.ratio*state.valueRange))
+    const { lastPos, stepCount } = fixPos( payload.lastPos, slideStep, start as number, slideRange)
+    if (lastPos === state.lastPos) return {
+      ...state,
+      sliding: false
+    }
+    const ratio = stepCount * step/valueRange
+
+    
+    return {
+      ...state,
+      ...payload,
+      ratio
+    }
+  }
+
+  if (isStartAction(action)) {
+    const { payload } = action
+    return {
+      ...state,
+      ...payload
+    }
+  }
+  
+  if (isSetRailAction(action)) {
+    const { payload } = action
+    const lastPos = payload.slideRange * state.ratio + payload.start
+      return {
+        ...state,
+        ...payload,
+        lastPos
+      }
+  }
+  return state
 }
