@@ -1,10 +1,10 @@
 // *根据步长比例指定滑动位置， 会导致误差积累
 // 
-const fixRatio = (ratio: number, valueRange: number, step: number): number => {
-  const x = 1/valueRange*step
-  const r = Math.round(Math.max(0, Math.min(1, ratio))/x)
-  return x * r
-}
+// const fixRatio = (ratio: number, valueRange: number, step: number): number => {
+//   const x = 1/valueRange*step
+//   const r = Math.round(Math.max(0, Math.min(1, ratio))/x)
+//   return x * r
+// }
 
 // 所以确定起点，确定区间
 const fixPos = (pos: number, step: number, start: number, range: number): {lastPos: number, stepCount: number} => {

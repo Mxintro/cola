@@ -67,6 +67,7 @@ export const Slider: React.FC<SliderProps> = ({
   const thumbRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    console.log('render')
     dispatch({
       type: 'setRail',
       payload: {
@@ -101,7 +102,7 @@ export const Slider: React.FC<SliderProps> = ({
       document.removeEventListener("mousemove", onSliding);
       document.removeEventListener("mouseup", onSlideEnd);
     };
-  }, []);
+  }, [onChange, onAfterChange]);
 
   const handleThumbMouseDown: React.MouseEventHandler<HTMLDivElement> =
     useCallback((e) => {
@@ -157,4 +158,4 @@ export const Slider: React.FC<SliderProps> = ({
   );
 };
 
-export default Slider;
+export default React.memo(Slider);

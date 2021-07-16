@@ -5,7 +5,6 @@ import classNames from 'classnames'
 import useClickOutside from '../../hooks/useClickOutside'
 import { debounce } from '../../utils/utils'
 import { OptionProps, OptionValueType } from '../Option'
-import { CSSTransition } from 'react-transition-group'
 
 const { useState, useEffect, useRef, useCallback } = React
 
@@ -26,27 +25,27 @@ export interface SelectProps extends Omit<InputProps, omitProps> {
   /**
    * 数据化配置选项内容
    */
-   options?: Array<DataSourceType> ,
-   /**
-    * 默认选项
-    */
-   defaultValue?: string,
+  options?: Array<DataSourceType>,
+  /**
+   * 默认选项
+   */
+  defaultValue?: string,
 }
 export const Select: React.FC<SelectProps> = ({
   value,
   options,
   onSelect,
   onChange,
-  defaultValue='',
+  defaultValue = '',
   style,
   children,
-  readOnly=true,
-  icon='chevron-down',
+  readOnly = true,
+  icon = 'chevron-down',
   ...restProps
 }) => {
 
-  const [inputValue, setValue] = useState<DataSourceType>({value: ''})
-  
+  const [inputValue, setValue] = useState<DataSourceType>({ value: '' })
+
   const [showDropdown, setShowDropdown] = useState<boolean>(false)
   // const [Loading, setLoading] = useState<boolean>(false)
   const [highlightIndex, setHighlightIndex] = useState<number>(-1)
@@ -56,86 +55,84 @@ export const Select: React.FC<SelectProps> = ({
   const isSelected = useRef(false)
   // 组件本身
   const thisComp = useRef<HTMLDivElement>(null)
-  useClickOutside(thisComp, ()=> {
+  useClickOutside(thisComp, () => {
     setShowDropdown(false)
   })
-  
+
   const renderOptions: DataSourceType[] = (renderMode.current || typeof options === 'undefined') ? [] : [...options]
 
   // 用于form中reset改变value
   useEffect(() => {
     const v = value as string
-    setValue({value: v})
-  },[value])
+    setValue({ value: v })
+  }, [value])
 
-  useEffect (() => {
-    const index = renderOptions.findIndex(item => item.value===defaultValue)
-    if ( index > -1 ){
+  useEffect(() => {
+    const index = renderOptions.findIndex(item => item.value === defaultValue)
+    if (index > -1) {
       setValue(renderOptions[index])
       setHighlightIndex(index)
     }
-  }, [])
+  },
+    [])
 
   // 点击也可以实现收放
   const handleOnClick = () => {
     setShowDropdown(!showDropdown)
 
-    // if (renderOptions.length > 0) {
-    //   setShowDropdown(!showDropdown)
-    // } 
   }
 
   // 防抖利用useCallback 或者 useRef 返回唯一回调
   const debounceSearch = useCallback(
-    debounce((value: string)=>{
+    debounce((value: string) => {
       onChange && onChange(value)
     }, 200),
     [],
   )
 
   const handleChange: React.ChangeEventHandler<HTMLInputElement> = e => {
-      const value = e.target.value.trim()
-      setValue({value})
-      if (value) {
-        debounceSearch(value)
-      } else {
-        setShowDropdown(false)
-        onChange && onChange(value)
-      }
+    const value = e.target.value.trim()
+    setValue({ value })
+    if (value) {
+      debounceSearch(value)
+    } else {
+      setShowDropdown(false)
+      onChange && onChange(value)
     }
+  }
 
   const handleOnSelect = (sel: DataSourceType) => {
     isSelected.current = true
     setShowDropdown(false)
     setValue(sel)
-    onSelect && onSelect (sel.value)
+    onSelect && onSelect(sel.value)
     onChange && onChange(sel.value)
   }
 
   // 处理键盘事件
   const highLight = (index: number) => {
     const childrenLength = renderOptions.length
-    if (index < 0) index = childrenLength-1
-    if (index > childrenLength-1) {
+    if (index < 0) index = childrenLength - 1
+    if (index > childrenLength - 1) {
       index = 0
     }
     setHighlightIndex(index)
   }
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement> ) => {
-    switch(e.code) {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    switch (e.code) {
       case 'ArrowDown':
-        highLight(highlightIndex+1)
+        highLight(highlightIndex + 1)
         break
       case 'ArrowUp':
-        highLight(highlightIndex-1)
+        highLight(highlightIndex - 1)
         break
       case 'Enter':
         e.preventDefault()
         // 针对第一次和选择后的特殊情况的收放
-        if ((renderOptions.length > 0 && isSelected.current) || highlightIndex===-1) {
+        if ((renderOptions.length > 0 && isSelected.current) || highlightIndex === -1) {
           setShowDropdown(!showDropdown)
-          isSelected.current =false
+          isSelected.current = false
         } else {
           renderOptions[highlightIndex] && handleOnSelect(renderOptions[highlightIndex])
         }
@@ -159,14 +156,14 @@ export const Select: React.FC<SelectProps> = ({
         if (childEl.type.displayName === 'Option') {
           // 解决渲染问题
           const describe = childEl.props.label || childEl.props.children
-          renderOptions.push({value: childEl.props.value, describe: describe})
+          renderOptions.push({ value: childEl.props.value, describe: describe })
           return (
             <li
-            key={index}
-            onMouseEnter={()=>setHighlightIndex(index)}
-            className={cnames}
+              key={index}
+              onMouseEnter={() => setHighlightIndex(index)}
+              className={cnames}
             >
-            {React.cloneElement(childEl, {onClick: handleOnSelect})}
+              {React.cloneElement(childEl, { onClick: handleOnSelect })}
             </li>)
         } else {
           throw new Error('Select only accepts Opiton component as Children');
@@ -180,11 +177,11 @@ export const Select: React.FC<SelectProps> = ({
         return <li
           key={index}
           className={cnames}
-          onMouseEnter={()=>setHighlightIndex(index)}
+          onMouseEnter={() => setHighlightIndex(index)}
           onClick={() => handleOnSelect(item)}
-          >
+        >
           {item.value}
-          </li>
+        </li>
       })
     }
   }
@@ -197,22 +194,22 @@ export const Select: React.FC<SelectProps> = ({
         animation='zoom-in-top'
       >
         <ul className="cola-select-list">
-          { renderTemplate() }
+          {renderTemplate()}
         </ul>
       </Transition>
     )
   }
-  
+
   return (
-    <div 
+    <div
       style={style}
       className="cola-select"
       onClick={handleOnClick}
-      ref={thisComp}> 
-      <Input 
+      ref={thisComp}>
+      <Input
         readOnly={readOnly}
         icon={showDropdown ? 'search' : icon}
-        className={showDropdown ? 'change-color':''}
+        className={showDropdown ? 'change-color' : ''}
         // 直接改变value不会调用onChange
         onChange={handleChange}
         value={inputValue.describe || inputValue.value}
