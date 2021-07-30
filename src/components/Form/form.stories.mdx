@@ -1,183 +1,199 @@
-import { Meta, Story, Canvas, Props, ArgsTable } from '@storybook/addon-docs/blocks'
-import { useState } from 'react'
-import Button from '../Button'
-import Input from '../Input'
-import Form, {FormItem, FormProps, FormItemProps} from './'
-import Checkbox from '../Checkbox'
-import Select from '../Select/'
-
+import {
+  Meta,
+  Story,
+  Canvas,
+  Props,
+  ArgsTable,
+} from "@storybook/addon-docs/blocks";
+import { useState } from "react";
+import Button from "../Button";
+import Input from "../Input";
+import Form, { FormItem, FormProps, FormItemProps } from "./";
+import Checkbox from "../Checkbox";
+import Select from "../Select/";
 
 <Meta
   component={Form}
-  title='Form 表单'
-  argTypes={{ onFinish: { action: 'onFinish' } }}
-  />
+  title="Form 表单"
+  argTypes={{ onFinish: { action: "onFinish" } }}
+/>
 
 export const initialValues = {
-  name: 'hello',
+  name: "hello",
   remmeber: true,
-  phone: '',
-}
+  phone: "",
+};
 
 export const onFinish = (values) => {
-    console.log(values)
-  }
+  console.log(values);
+};
 export const onFinishFailed = (values) => {
-    console.log(values)
-  }
+  console.log(values);
+};
 
 # Form 表单
-<br/>
+
+<br />
 
 #### 表单组件，对多项数据进行录入、校验和收集管理。
 
-<br/>
+<br />
 
-<Story name='form' args={{
-  initialValues: initialValues,
-  onFinish: onFinish,
-  onFinishFailed: onFinishFailed,
-  style: {width:500}
-}}>
-  {
-    args => (
-      <Form {...args}>
-        <Form.Item
-          name="name" 
-          label='用户名'
-          rules={[{ required: true, message: '不能为空' }]}
-          >
-          <Input/>
-        </Form.Item>
-        <Form.Item 
-          name="password"
-          label='密码'
-          rules={[
-            {required: true, message: '不能为空' },
-            { min: 6, message: '最少6位数'}
-          ]}
-          >
-          <Input.Password placeholder="input placeholder" />
-        </Form.Item>
-        <Form.Item name="remmeber">
-          <Checkbox>记住密码</Checkbox>
-        </Form.Item>
-        <Form.Item 
-          name="gender"
-          label='性别'
-          rules={[{required: true, message: '请选择性别' }]}
-          >
-          <Select 
-            placeholder='请选择性别'
-          >
-            <Select.Option value='男生'></Select.Option>
-            <Select.Option value='女生'></Select.Option>
-          </Select>
-        </Form.Item>
-        <Form.Item
-          name="phone" 
-          label='手机'
-          rules={[{ pattern:/^(?:(?:\+|00)86)?1[3-9]\d{9}$/, message: '手机格式不符' }]}
-          >
-          <Input/>
-        </Form.Item>
-        <Form.Item>
-          <Button btnType='primary' type='submit'>submit</Button>
-          <Button type='reset'>reset</Button>
-        </Form.Item>
-      </Form>
-    )
-  }
+<Story
+  name="form"
+  args={{
+    initialValues: initialValues,
+    onFinish: onFinish,
+    onFinishFailed: onFinishFailed,
+    style: { width: 500 },
+  }}
+>
+  {(args) => (
+    <Form {...args}>
+      <Form.Item
+        name="name"
+        label="用户名"
+        rules={[{ required: true, message: "不能为空" }]}
+      >
+        <Input />
+      </Form.Item>
+      <Form.Item
+        name="password"
+        label="密码"
+        rules={[
+          { required: true, message: "不能为空" },
+          { min: 6, message: "最少6位数" },
+        ]}
+      >
+        <Input.Password placeholder="input placeholder" />
+      </Form.Item>
+      <Form.Item name="remmeber">
+        <Checkbox>记住密码</Checkbox>
+      </Form.Item>
+      <Form.Item
+        name="gender"
+        label="性别"
+        rules={[{ required: true, message: "请选择性别" }]}
+      >
+        <Select placeholder="请选择性别">
+          <Select.Option value="男生"></Select.Option>
+          <Select.Option value="女生"></Select.Option>
+        </Select>
+      </Form.Item>
+      <Form.Item
+        name="phone"
+        label="手机"
+        rules={[
+          { pattern: /^(?:(?:\+|00)86)?1[3-9]\d{9}$/, message: "手机格式不符" },
+        ]}
+      >
+        <Input />
+      </Form.Item>
+      <Form.Item>
+        <Button btnType="primary" type="submit">
+          submit
+        </Button>
+        <Button type="reset">reset</Button>
+      </Form.Item>
+    </Form>
+  )}
 </Story>
 
-<br/>
+<br />
 
 #### 引入：
-```tsx
-  import { Form } from 'cola-react-ui'
-```
-#### 基本用法：
-##### 
-```tsx
-import React, { useState } from 'react'
-import { Form, Button, Input, Checkbox, Select } from 'cola-react-ui'
 
-const {Option} = Select
+```tsx
+import { Form } from "cola-react-ui";
+```
+
+#### 基本用法：
+
+#####
+
+```tsx
+import React, { useState } from "react";
+import { Form, Button, Input, Checkbox, Select } from "cola-react-ui";
+
+const { Option } = Select;
 
 const MyForm: React.FC = () => {
   const initialValues = {
-    name: 'hello',
-    password: '',
+    name: "hello",
+    password: "",
     remmeber: true,
-    phone: '',
-  }
+    phone: "",
+  };
   const onFinish = (values: any) => {
-    console.log(values)
-  }
+    console.log(values);
+  };
   const onFinishFailed = (values: any) => {
-    console.log(values)
-  }
+    console.log(values);
+  };
 
   return (
     <>
-      <Form 
+      <Form
         initialValues={initialValues}
         onFinish={onFinish}
         onFinishFailed={onFinishFailed}
-        style={{width:500}}>
+        style={{ width: 500 }}
+      >
         <Form.Item
-          name="name" 
-          label='用户名'
-          rules={[{ required: true, message: '不能为空' }]}
-          >
-          <Input/>
+          name="name"
+          label="用户名"
+          rules={[{ required: true, message: "不能为空" }]}
+        >
+          <Input />
         </Form.Item>
-        <Form.Item 
+        <Form.Item
           name="password"
-          label='密码'
+          label="密码"
           rules={[
-            {required: true, message: '不能为空' },
-            { min: 6, message: '最少6位数'}
+            { required: true, message: "不能为空" },
+            { min: 6, message: "最少6位数" },
           ]}
-          >
+        >
           <Input.Password placeholder="input placeholder" />
         </Form.Item>
         <Form.Item name="remmeber">
           <Checkbox>记住密码</Checkbox>
         </Form.Item>
-        <Form.Item 
+        <Form.Item
           name="gender"
-          label='性别'
-          rules={[{required: true, message: '请选择性别' }]}
-          >
-          <Select 
-            placeholder='请选择性别'
-          >
-            <Option value='男生'></Option>
-            <Option value='女生'></Option>
+          label="性别"
+          rules={[{ required: true, message: "请选择性别" }]}
+        >
+          <Select placeholder="请选择性别">
+            <Option value="男生"></Option>
+            <Option value="女生"></Option>
           </Select>
         </Form.Item>
         <Form.Item
-          name="phone" 
-          label='手机'
-          rules={[{ pattern:/^(?:(?:\+|00)86)?1[3-9]\d{9}$/, message: '手机格式不符' }]}
-          >
-          <Input/>
+          name="phone"
+          label="手机"
+          rules={[
+            {
+              pattern: /^(?:(?:\+|00)86)?1[3-9]\d{9}$/,
+              message: "手机格式不符",
+            },
+          ]}
+        >
+          <Input />
         </Form.Item>
         <Form.Item>
-          <Button btnType='primary' type='submit'>submit</Button>
-          <Button type='reset'>reset</Button>
+          <Button btnType="primary" type="submit">
+            submit
+          </Button>
+          <Button type="reset">reset</Button>
         </Form.Item>
       </Form>
     </>
-  )
-}
-
+  );
+};
 ```
 
-#### 自定义选项
-##### 不使用options设置数据源，直接通过Form.Options展示数据
-<!-- 
+<!--
 <Canvas>
   <Story name="Form" args={{
     initialValues: initialValues,
@@ -189,13 +205,13 @@ const MyForm: React.FC = () => {
       <Form {...args}
         >
         <Form.Item
-          name="name" 
+          name="name"
           label='用户名'
           rules={[{ required: true, message: '不能为空' }]}
           >
           <Input/>
         </Form.Item>
-        <Form.Item 
+        <Form.Item
           name="password"
           label='密码'
           rules={[
@@ -220,11 +236,11 @@ const MyForm: React.FC = () => {
 ## API
 
 #### Form
-<ArgsTable of={Form}/>
+
+<ArgsTable of={Form} />
 
 #### Form.Item
-##### 设置表单字段组件，用于对Input、Select、Check等子组件数据双向绑定、校验。
-<ArgsTable of={FormItem}/>
 
+##### 设置表单字段组件，用于对 Input、Select、Check 等子组件数据双向绑定、校验。
 
-
+<ArgsTable of={FormItem} />
